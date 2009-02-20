@@ -19,3 +19,6 @@ void putch(unsigned char c);
 void puts(unsigned char *text);
 void settextcolor(unsigned char forecolor, unsigned char backcolor);
 void init_video(void);
+
+void gdt_install(void);
+void idt_install(void);

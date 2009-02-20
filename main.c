@@ -2,6 +2,8 @@
 
 int main(void)
 {
+	gdt_install();
+	idt_install();
 	init_video();
 	puts("Hello world!");
 	for (;;);
