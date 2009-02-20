@@ -1,4 +1,4 @@
-#include <string.h>
+#include "system.h"
 
 int strcmp(const char *s1, const char *s2)
 {
@@ -63,11 +63,28 @@ int strcasecmp(const char *s1, const char *s2)
 	int tmp1, tmp2;
 	for ( ; *s1; s1++, s2++) {
 		int x;
-		tmp1 = transform(s1);
-		tmp2 = transform(s2);
+		tmp1 = _case_transform(*s1);
+		tmp2 = _case_transform(*s2);
 		x = tmp1 - tmp2;
 		if (x)
 			return x;
 	}
 	return 0;
+}
+
+void *memcpy(void *dest, const void *src, size_t n)
+{
+	char *_d = dest;
+	const char *_s = src;
+	while (n--)
+		*_d++ = *_s++;
+	return dest;
+}
+
+void *memset(void *s, int c, size_t n)
+{
+	char *_s = s;
+	while (n--)
+		*_s = c;
+	return s;
 }

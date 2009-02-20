@@ -1,4 +1,4 @@
-#include <system.h>
+#include "system.h"
 
 /* More information at http://www.brackeen.com/home/vga */
 
@@ -7,8 +7,8 @@
  * These define our textpointer, our background and foreground colors
  * (attributes), and x and y cursor coordinates.
  */
-static unsigned short *textmemptr = 0xB8000;
-static const int attrib = 0x0F;
+static unsigned short *textmemptr = (unsigned short *)0xB8000;
+static int attrib = 0x0F;
 static int csr_x = 0, csr_y = 0;
 
 /* Scrolls the screen */
@@ -32,7 +32,7 @@ void scroll(void)
 		 * Finally, we set the chunk of memory that occupies the last
 		 * line of text to our 'blank' character
 		 */
-		memsetw(textmemptr + (25 - temp) * 80, blank, 80);
+		memset(textmemptr + (25 - temp) * 80, blank, 80);
 		csr_y = 25 - 1;
 	}
 }
@@ -73,7 +73,7 @@ void cls(void)
 	/* Sets the entire screen to spaces in our current
 	*  color */
 	for(i = 0; i < 25; i++)
-		memsetw (textmemptr + i * 80, blank, 80);
+		memset(textmemptr + i * 80, blank, 80);
 
 	/* Update out virtual cursor, and then move the
 	*  hardware cursor */
@@ -138,9 +138,9 @@ void puts(unsigned char *text)
 /* Sets the forecolor and backcolor that we will use */
 void settextcolor(unsigned char forecolor, unsigned char backcolor)
 {
-	/* Top 4 bytes are the background, bottom 4 bytes
-	*  are the foreground color */
-	attrib = (backcolor << 4) | (forecolor & 0x0F)
+	/* Top 4 bytes are the background, bottom 4 bytes are the foreground
+	 * color */
+	attrib = (backcolor << 4) | (forecolor & 0x0F);
 }
 
 /* Sets our text-mode VGA pointer, then clears the screen for us */
