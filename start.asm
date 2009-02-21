@@ -9,7 +9,6 @@ start:
 ; This part MUST be 4byte aligned, so we solve that issue using 'ALIGN 4'
 ALIGN 4
 mboot:
-    ; Multiboot macros to make a few lines later more readable
     MULTIBOOT_PAGE_ALIGN	equ 1<<0
     MULTIBOOT_MEMORY_INFO	equ 1<<1
     MULTIBOOT_AOUT_KLUDGE	equ 1<<16
@@ -18,27 +17,25 @@ mboot:
     MULTIBOOT_CHECKSUM	equ -(MULTIBOOT_HEADER_MAGIC + MULTIBOOT_HEADER_FLAGS)
     EXTERN code, bss, end
 
-    ; This is the GRUB Multiboot header. A boot signature
+    ; This is the Multiboot header.
     dd MULTIBOOT_HEADER_MAGIC
     dd MULTIBOOT_HEADER_FLAGS
     dd MULTIBOOT_CHECKSUM
 
-    ; AOUT kludge - must be physical addresses. Make a note of these:
-    ; The linker script fills in the data for these ones!
+    ; AOUT kludge - must be physical addresses.
     dd mboot
     dd code
     dd bss
     dd end
     dd start
 
+SECTION .data
+
 stublet:
     extern main
     call main
     jmp $
 
-
-; XXX: load the GDT here
-; XXX: add ISR routines
 
 ; Reserve 8Kb of stack space
 SECTION .bss
