@@ -21,12 +21,15 @@ struct idt_ptr {
 *  for which the 'presence' bit is cleared (0) will generate an
 *  "Unhandled Interrupt" exception */
 static struct idt_entry idt[256];
-static struct idt_ptr idtp;
+struct idt_ptr idtp;
 
+void idt_load(void);
+#if 0
 static void idt_load(void)
 {
 	asm("lidt %0\n" : :"m"(idtp));
 }
+#endif
 
 /* Use this function to set an entry in the IDT. */
 static void idt_set_gate(unsigned char num, unsigned long base, unsigned short sel, unsigned char flags)
@@ -44,7 +47,7 @@ void idt_install(void)
 {
 	/* Sets the special IDT pointer up, just like in 'gdt.c' */
 	idtp.limit = sizeof(idt) - 1;
-	idtp.base = &idt;
+	idtp.base = (unsigned int)&idt;
 
 	/* Clear out the entire IDT, initializing it to zeros */
 	memset(&idt, 0, sizeof(idt));

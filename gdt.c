@@ -19,8 +19,11 @@ struct gdt_ptr {
 
 /* Our GDT, with 3 entries, and finally our special GDT pointer */
 static struct gdt_entry gdt[3];
-static struct gdt_ptr gp;
+struct gdt_ptr gp;
 
+void gdt_flush(void);
+
+#if 0
 static void gdt_flush(void)
 {
 	asm("lgdt %0\n\t"
@@ -34,6 +37,7 @@ static void gdt_flush(void)
 		"flush2:\n\t"
 		: :"m"(gp));
 }
+#endif
 
 /* Setup a descriptor in the Global Descriptor Table */
 static void gdt_set_gate(int num, unsigned long base, unsigned long limit, unsigned char access, unsigned char gran)
