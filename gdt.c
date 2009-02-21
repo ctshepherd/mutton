@@ -1,7 +1,5 @@
 #include "system.h"
 
-extern void gdt_flush(void)
-
 /* Defines a GDT entry. Prevent compiler "optimization" by packing. */
 struct gdt_entry {
 	unsigned short limit_low;
@@ -26,13 +24,13 @@ static struct gdt_ptr gp;
 static void gdt_flush(void)
 {
 	asm("lgdt %0\n\t"
-		"movw $0x10,%ax\n\t" /* 0x10 is the offset in the GDT to our data segment */
-		"movw %ax,%ds\n\t"
-		"movw %ax,%es\n\t"
-		"movw %ax,%fs\n\t"
-		"movw %ax,%gs\n\t"
-		"movw %ax,%ss\n\t"
-		"jmp 0x08:flush2\n\t" /* 0x08 is the offset to our code segment: Far jump! */
+		"movw $0x10,%%ax\n\t" /* 0x10 is the offset in the GDT to our data segment */
+		"movw %%ax,%%ds\n\t"
+		"movw %%ax,%%es\n\t"
+		"movw %%ax,%%fs\n\t"
+		"movw %%ax,%%gs\n\t"
+		"movw %%ax,%%ss\n\t"
+		"jmp flush2, 0x08\n\t" /* 0x08 is the offset to our code segment: Far jump! */
 		"flush2:\n\t"
 		: :"m"(gp));
 }
@@ -58,7 +56,7 @@ void gdt_install(void)
 {
 	/* Setup the GDT pointer and limit */
 	gp.limit = sizeof(gdt) - 1;
-	gp.base = &gdt;
+	gp.base = (unsigned int)&gdt;
 
 	/* Our NULL descriptor */
 	gdt_set_gate(0, 0, 0, 0, 0);
