@@ -1,5 +1,6 @@
 ; Note: interrupts are disabled at this point
 [BITS 32]
+SECTION .text
 global start
 start:
     mov esp, _sys_stack     ; This points the stack to our new stack area

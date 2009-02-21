@@ -4,9 +4,9 @@ OBJECTS = main.o string.o port.o screen.o gdt.o idt.o start.o helper.o
 all: kernel.bin
 
 start.o: start.asm
-	nasm -f aout -o start.o start.asm
+	nasm -f elf -o start.o start.asm
 helper.o: helper.asm
-	nasm -f aout -o helper.o helper.asm
+	nasm -f elf -o helper.o helper.asm
 
 kernel.bin: link.ld $(OBJECTS)
 	ld -T link.ld -o kernel.bin $(OBJECTS)
