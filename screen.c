@@ -1,3 +1,4 @@
+#include "port.h"
 #include "system.h"
 
 /* More information at http://www.brackeen.com/home/vga */
