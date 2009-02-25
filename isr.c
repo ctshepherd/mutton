@@ -95,12 +95,13 @@ void isrs_install(void)
 
 void fault_handler(struct regs *r)
 {
+	puts("Fatal exception: ");
 	if (r->int_no < 32) {
 		if (r->int_no < ARRAY_SIZE(exceptions))
 			puts(exceptions[r->int_no]);
 		else
-			puts("Reserved");
-		puts(" exception. System Halted!\n");
+			puts("Reserved Exception");
+		puts("\nPanicking: System Halted!\n");
 		for (;;);
 	}
 }
