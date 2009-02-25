@@ -1,7 +1,10 @@
 CFLAGS = -O2 -fomit-frame-pointer -nostdinc -fno-builtin -Wall -W -Wextra -funsigned-char
-OBJECTS = main.o string.o port.o screen.o gdt.o idt.o start.o helper.o
+OBJECTS = main.o string.o port.o screen.o gdt.o idt.o start.o helper.o isr.o
 
 all: kernel.bin
+
+install:
+	sudo cp kernel.bin /boot/mutton.bin
 
 start.o: start.asm
 	nasm -f elf -o start.o start.asm
