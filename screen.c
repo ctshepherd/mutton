@@ -129,23 +129,10 @@ void putch(char c)
 	move_csr();
 }
 
-/* Uses the above routine to output a string... */
-void puts(const char *text)
-{
-	while (*text)
-		putch(*text++);
-}
-
 /* Sets the forecolor and backcolor that we will use */
 void settextcolor(unsigned char forecolor, unsigned char backcolor)
 {
 	/* Top 4 bytes are the background, bottom 4 bytes are the foreground
 	 * color */
 	attrib = (backcolor << 4) | (forecolor & 0x0F);
-}
-
-/* Sets our text-mode VGA pointer, then clears the screen for us */
-void init_video(void)
-{
-	cls();
 }

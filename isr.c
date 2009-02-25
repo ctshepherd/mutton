@@ -1,3 +1,4 @@
+#include "screen.h"
 #include "system.h"
 
 const char *exceptions[] = {

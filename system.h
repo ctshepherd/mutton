@@ -11,18 +11,6 @@ char *strncpy(char *dest, const char *src, size_t n);
 void *memcpy(void *dest, const void *src, size_t n);
 void *memset(void *s, int c, size_t n);
 
-void scroll(void);
-void move_csr(void);
-void cls(void);
-void putch(char c);
-void puts(const char *text);
-void settextcolor(unsigned char forecolor, unsigned char backcolor);
-void init_video(void);
-
-void bochs_putch(char c);
-void bochs_puts(const char *text);
-void bochs_break(void);
-
 void gdt_install(void);
 void idt_install(void);
 void isrs_install(void);
