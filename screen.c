@@ -149,22 +149,3 @@ void init_video(void)
 {
 	cls();
 }
-
-/* Outputs a character to the debug console */
-void bochs_putch(char c)
-{
-	outportb(0xe9, c);
-}
-
-void bochs_puts(const char *text)
-{
-	while (*text)
-		bochs_putch(*text++);
-}
-
-/* Stops simulation and breaks into the debug console */
-void bochs_break(void)
-{
-	outportw(0x8A00, 0x8A00);
-	outportw(0x8A00, 0x8AE0);
-}
