@@ -1,2 +1,6 @@
 kernel.bin
+pad
+floppy.img
+stage1
+stage2
 *.o

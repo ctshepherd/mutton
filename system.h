@@ -22,5 +22,9 @@ void puts(const char *text);
 void settextcolor(unsigned char forecolor, unsigned char backcolor);
 void init_video(void);
 
+void bochs_putch(char c);
+void bochs_puts(const char *text);
+void bochs_break(void);
+
 void gdt_install(void);
 void idt_install(void);

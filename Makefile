@@ -6,6 +6,15 @@ all: kernel.bin
 install:
 	sudo cp kernel.bin /boot/mutton.bin
 
+pad:
+	dd if=/dev/zero of=pad count=1 bs=750
+
+floppy.img: stage1 stage2 pad kernel.bin
+	cat stage1 stage2 pad kernel.bin >floppy.img
+	python -c 'from math import ceil; print int(ceil(len(open("kernel.bin").read())/512))'
+
+disk: floppy.img
+
 start.o: start.asm
 	nasm -f elf -o start.o start.asm
 helper.o: helper.asm
