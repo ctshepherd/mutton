@@ -1,11 +1,23 @@
-unsigned char inportb(unsigned short _port)
+unsigned char inportb(unsigned short port)
 {
 	unsigned char rv;
-	__asm__ __volatile__ ("inb %1, %0" : "=a" (rv) : "dN" (_port));
+	__asm__ __volatile__ ("inb %1, %0" : "=a" (rv) : "dN" (port));
 	return rv;
 }
 
-void outportb(unsigned short _port, unsigned char _data)
+unsigned short inportw(unsigned short port)
 {
-	__asm__ __volatile__ ("outb %1, %0" : : "dN" (_port), "a" (_data));
+	unsigned short rv;
+	__asm__ __volatile__ ("inw %1, %0" : "=r" (rv) : "dN" (port));
+	return rv;
+}
+
+void outportb(unsigned short port, unsigned char data)
+{
+	__asm__ __volatile__ ("outb %1, %0" : : "dN" (port), "a" (data));
+}
+
+void outportw(unsigned short port, unsigned short data)
+{
+	__asm__ __volatile__ ("outw %1, %0" : : "dN" (port), "r" (data));
 }
