@@ -1,5 +1,5 @@
 CFLAGS = -O2 -fomit-frame-pointer -nostdinc -fno-builtin -Wall -W -Wextra -funsigned-char
-OBJECTS = main.o string.o port.o screen.o gdt.o idt.o start.o helper.o isr.o
+OBJECTS = main.o string.o port.o screen.o gdt.o idt.o start.o helper.o isr.o isr_handlers.o
 
 all: kernel.bin
 
@@ -19,6 +19,8 @@ start.o: start.asm
 	nasm -f elf -o start.o start.asm
 helper.o: helper.asm
 	nasm -f elf -o helper.o helper.asm
+isr_handlers.o: isr_handlers.asm
+	nasm -f elf -o isr_handlers.o isr_handlers.asm
 
 kernel.bin: link.ld $(OBJECTS)
 	ld -T link.ld -o kernel.bin $(OBJECTS)
