@@ -15,8 +15,8 @@ void *memset(void *s, int c, size_t n);
 void scroll(void);
 void move_csr(void);
 void cls(void);
-void putch(unsigned char c);
-void puts(unsigned char *text);
+void putch(char c);
+void puts(const char *text);
 void settextcolor(unsigned char forecolor, unsigned char backcolor);
 void init_video(void);
 
