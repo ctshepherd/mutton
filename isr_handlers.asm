@@ -11,10 +11,14 @@ isr%1:
 %macro INTR_EC 1
 global isr%1
 isr%1:
+    nop
+    nop
     push byte %1
     jmp isr_common_stub
 %endmacro
 
+global int_stubs
+int_stubs:
 INTR_NOEC 0
 INTR_NOEC 1
 INTR_NOEC 2
