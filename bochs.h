@@ -1,6 +1,8 @@
 #ifndef _BOCHS_H
 #define _BOCHS_H
 
+#include "port.h"
+
 /* Outputs a character to the debug console */
 static inline void bochs_putch(char c)
 {
