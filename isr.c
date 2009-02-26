@@ -1,7 +1,7 @@
 #include "screen.h"
 #include "system.h"
 
-const char *exceptions[] = {
+static const char *exceptions[] = {
 	"Division By Zero",
 	"Debug",
 	"Non Maskable Interrupt",
