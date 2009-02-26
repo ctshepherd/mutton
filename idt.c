@@ -1,3 +1,4 @@
+#include "string.h"
 #include "system.h"
 
 /* Defines an IDT entry */

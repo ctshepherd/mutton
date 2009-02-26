@@ -1,5 +1,6 @@
 #include "port.h"
-#include "system.h"
+#include "screen.h"
+#include "string.h"
 
 /* More information at http://www.brackeen.com/home/vga */
 
