@@ -130,6 +130,19 @@ void putch(char c)
 	move_csr();
 }
 
+static const char hex[] = "0123456789ABCDEF";
+#define print_hex(byte) do {		\
+	putch(hex[(byte) & 0xF0]);	\
+	putch(hex[(byte) & 0x0F]);	\
+} while (0)
+
+void put_byte(char byte)
+{
+	putch('0');
+	putch('x');
+	print_hex(byte);
+}
+
 /* Sets the forecolor and backcolor that we will use */
 void settextcolor(unsigned char forecolor, unsigned char backcolor)
 {
