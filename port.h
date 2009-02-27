@@ -22,7 +22,7 @@ static inline void outportb(unsigned short port, unsigned char data)
 
 static inline void outportw(unsigned short port, unsigned short data)
 {
-	__asm__ __volatile__ ("outw %1, %0" : : "dN" (port), "r" (data));
+	__asm__ __volatile__ ("outw %1, %0" : : "dN" (port), "a" (data));
 }
 
 #endif
