@@ -15,9 +15,4 @@ static inline void puts(const char *text)
 
 void settextcolor(unsigned char forecolor, unsigned char backcolor);
 
-static inline void init_video(void)
-{
-	cls();
-}
-
 #endif
