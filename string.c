@@ -81,10 +81,18 @@ void *memcpy(void *dest, const void *src, size_t n)
 	return dest;
 }
 
-void *memset(void *s, int c, size_t n)
+void *memset(void *d, int c, size_t n)
 {
-	char *_s = s;
+	char *_d = d;
 	while (n--)
-		*_s = c;
-	return s;
+		*_d++ = c;
+	return d;
+}
+
+unsigned short *memsetw(unsigned short *d, unsigned short c, size_t n)
+{
+	unsigned short *_d = d;
+	while(n--)
+		*_d++ = c;
+	return d;
 }
