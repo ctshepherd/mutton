@@ -26,8 +26,9 @@ static const char *exceptions[] = {
 void isrs_install(void)
 {
 	unsigned i;
-	extern char *int_stubs;
-	char *p = int_stubs;
+	extern void int_stubs(void);
+	char *p = (char *)int_stubs;
+
 	for (i = 0; i < 31; i++, p += 9)
 		idt_set_gate(i, (unsigned)p, 0x08, 0x8E);
 }
