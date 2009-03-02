@@ -31,7 +31,8 @@ static void idt_load(void)
 #endif
 
 /* Use this function to set an entry in the IDT. */
-void idt_set_gate(unsigned char num, unsigned long base, unsigned short sel, unsigned char flags)
+void idt_set_gate(unsigned char num, unsigned long base, unsigned short sel,
+		unsigned char flags)
 {
 	idt[num].base_lo = (base & 0xFFFF);
 	idt[num].base_hi = (base >> 16) & 0xFFFF;
@@ -44,14 +45,11 @@ void idt_set_gate(unsigned char num, unsigned long base, unsigned short sel, uns
 /* Installs the IDT */
 void idt_install(void)
 {
-	/* Sets the special IDT pointer up, just like in 'gdt.c' */
 	idtp.limit = sizeof(idt) - 1;
 	idtp.base = (unsigned int)&idt;
 
 	/* Clear out the entire IDT, initializing it to zeros */
 	memset(&idt, 0, sizeof(idt));
-
-	/* XXX: Add ISRs to the IDT */
 
 	/* Points the processor's internal register to the new IDT */
 	idt_load();
