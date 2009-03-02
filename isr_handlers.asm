@@ -47,8 +47,24 @@ INTR_NOEC 28
 INTR_NOEC 29
 INTR_NOEC 30
 INTR_NOEC 31
+INTR_NOEC 32
+INTR_NOEC 33
+INTR_NOEC 34
+INTR_NOEC 35
+INTR_NOEC 36
+INTR_NOEC 37
+INTR_NOEC 38
+INTR_NOEC 39
+INTR_NOEC 40
+INTR_NOEC 41
+INTR_NOEC 42
+INTR_NOEC 43
+INTR_NOEC 44
+INTR_NOEC 45
+INTR_NOEC 46
+INTR_NOEC 47
 
-extern fault_handler
+extern isr_handler
 
 ; This is our common ISR stub. It saves the processor state, sets
 ; up for kernel mode segments, calls the C-level fault handler,
@@ -66,7 +82,7 @@ isr_common_stub:
     mov gs, ax
     mov eax, esp   ; Push us the stack
     push eax
-    mov eax, fault_handler
+    mov eax, isr_handler
     call eax       ; A special call, preserves the 'eip' register
     pop eax
     pop gs

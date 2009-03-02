@@ -5,7 +5,7 @@ all: kernel.bin
 
 gdt.o: gdt.c system.h
 idt.o: idt.c string.h system.h
-isr.o: isr.c screen.h system.h
+isr.o: isr.c port.h screen.h system.h
 main.o: main.c screen.h system.h
 output.o: output.c output.h stdarg.h
 screen.o: screen.c screen.h stdarg.h port.h screen.h string.h output.h

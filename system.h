@@ -1,9 +1,5 @@
 #define ARRAY_SIZE(a) (sizeof(a)/sizeof(a[0]))
 
-void gdt_install(void);
-void idt_install(void);
-void isrs_install(void);
-
 struct regs {
 	/* pushed the segs last */
 	unsigned int gs, fs, es, ds;
@@ -15,5 +11,11 @@ struct regs {
 	unsigned int eip, cs, eflags, useresp, ss;
 };
 
+void gdt_install(void);
+
+void idt_install(void);
 void idt_set_gate(unsigned char num, unsigned long base, unsigned short sel,
-				unsigned char flags);
+		unsigned char flags);
+
+void isrs_install(void);
+void register_irq(unsigned irq, void (*handler)(struct regs *r));
