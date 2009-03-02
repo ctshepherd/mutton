@@ -1,6 +1,9 @@
+#include "stdarg.h"
+
 #include "port.h"
 #include "screen.h"
 #include "string.h"
+#include "output.h"
 
 /* More information at http://www.brackeen.com/home/vga */
 
@@ -130,23 +133,22 @@ void putch(char c)
 	move_csr();
 }
 
-static const char hex[] = "0123456789ABCDEF";
-#define print_hex(byte) do {		\
-	putch(hex[(byte) & 0xF0]);	\
-	putch(hex[(byte) & 0x0F]);	\
-} while (0)
-
-void put_byte(char byte)
-{
-	putch('0');
-	putch('x');
-	print_hex(byte);
-}
-
 /* Sets the forecolor and backcolor that we will use */
 void settextcolor(unsigned char forecolor, unsigned char backcolor)
 {
 	/* Top 4 bytes are the background, bottom 4 bytes are the foreground
 	 * color */
 	attrib = (backcolor << 4) | (forecolor & 0x0F);
+}
+
+int printf(const char *format, ...)
+{
+	va_list args;
+	int ret;
+
+	va_start(args, format);
+	ret = _vprintf(format, args, putch);
+	va_end(args);
+
+	return ret;
 }
