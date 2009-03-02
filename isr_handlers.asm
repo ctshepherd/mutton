@@ -1,16 +1,12 @@
 SECTION .text
 
 %macro INTR_NOEC 1
-global isr%1
-isr%1:
     push byte 0
     push byte %1
     jmp isr_common_stub
 %endmacro
 
 %macro INTR_EC 1
-global isr%1
-isr%1:
     nop
     nop
     push byte %1
