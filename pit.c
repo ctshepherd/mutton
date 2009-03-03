@@ -15,7 +15,7 @@ void timer_phase(int hz)
 	outportb(0x40, divisor >> 8);     /* Set high byte of divisor */
 }
 
-void pit_timer(struct regs *r)
+static void pit_timer(struct regs *r)
 {
 	static unsigned long count = 0;
 	count++;

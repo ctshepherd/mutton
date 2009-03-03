@@ -19,3 +19,9 @@ void idt_set_gate(unsigned char num, unsigned long base, unsigned short sel,
 
 void isrs_install(void);
 void register_irq(unsigned irq, void (*handler)(struct regs *r));
+
+void init_pit(void);
+void timer_phase(int hz);
+unsigned long gettimeofday(void);
+
+void init_kbd(void);

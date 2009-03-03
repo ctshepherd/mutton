@@ -11,6 +11,7 @@ static void init(void)
 	isrs_install();
 
 	init_pit();
+	init_kbd();
 }
 
 int main(void)
