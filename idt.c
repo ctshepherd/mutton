@@ -1,7 +1,6 @@
 #include "string.h"
 #include "system.h"
 
-/* Defines an IDT entry */
 struct idt_entry {
 	unsigned short base_lo;
 	unsigned short sel;        /* Our kernel segment goes here! */
@@ -20,17 +19,12 @@ struct idt_ptr {
  * exception: Any descriptor for which the 'presence' bit is cleared (0)
  * generates an "Unhandled Interrupt" exception */
 static struct idt_entry idt[256];
-struct idt_ptr idtp;
+static struct idt_ptr idtp = {
+	.limit = sizeof(idt) - 1,
+	.base = (unsigned int)&idt,
+};
 
-void idt_load(void);
-#if 0
-static void idt_load(void)
-{
-	asm("lidt %0\n" : :"m"(idtp));
-}
-#endif
-
-/* Use this function to set an entry in the IDT. */
+/* Sets an entry in the IDT. */
 void idt_set_gate(unsigned char num, unsigned long base, unsigned short sel,
 		unsigned char flags)
 {
@@ -42,15 +36,9 @@ void idt_set_gate(unsigned char num, unsigned long base, unsigned short sel,
 	idt[num].flags = flags;
 }
 
-/* Installs the IDT */
 void idt_install(void)
 {
-	idtp.limit = sizeof(idt) - 1;
-	idtp.base = (unsigned int)&idt;
-
-	/* Clear out the entire IDT, initializing it to zeros */
 	memset(&idt, 0, sizeof(idt));
-
 	/* Points the processor's internal register to the new IDT */
-	idt_load();
+	asm("lidt %0\n" : :"m"(idtp));
 }
