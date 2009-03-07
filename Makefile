@@ -8,7 +8,7 @@ idt.o: idt.c string.h system.h
 isr.o: isr.c port.h screen.h system.h
 main.o: main.c screen.h system.h
 output.o: output.c output.h stdarg.h
-screen.o: screen.c screen.h stdarg.h port.h screen.h string.h output.h
+screen.o: screen.c screen.h stdarg.h port.h string.h output.h
 string.o: string.c string.h
 
 install:
