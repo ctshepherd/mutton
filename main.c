@@ -1,4 +1,3 @@
-#include "pit.h"
 #include "screen.h"
 #include "system.h"
 
