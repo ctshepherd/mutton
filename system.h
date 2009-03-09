@@ -14,6 +14,8 @@ struct regs {
 	unsigned int eip, cs, eflags, useresp, ss;
 };
 
+void panic(const char *msg);
+
 void gdt_install(void);
 
 void idt_install(void);

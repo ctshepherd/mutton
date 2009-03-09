@@ -1,6 +1,12 @@
 #include "screen.h"
 #include "system.h"
 
+void panic(const char *msg)
+{
+	printf("PANIC! Reason: %s\n");
+	while (1); /* Spin */
+}
+
 /* Init function: load anything and everything needed. */
 static void init(void)
 {
