@@ -53,13 +53,10 @@ void isrs_install(void)
 	extern void int_stubs(void);
 	char *p = (char *)int_stubs;
 
-	/* Exceptions */
-	for (i = 0; i < 31; i++, p += 9)
-		idt_set_gate(i, (unsigned)p, 0x08, 0x8E);
-
-	/* Now we do IRQs */
 	irq_remap();
-	for (; i < 47; i++, p += 9)
+	/* Each IRQ stub is 9 bytes long, so we just allocate them in this
+	 * loop. */
+	for (i = 0; i < 47; i++, p += 9)
 		idt_set_gate(i, (unsigned)p, 0x08, 0x8E);
 
 	/* Enable IRQs */
