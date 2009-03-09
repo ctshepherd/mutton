@@ -21,7 +21,11 @@ void idt_set_gate(unsigned char num, unsigned long base, unsigned short sel,
 		unsigned char flags);
 
 void isrs_install(void);
-void register_irq(unsigned irq, void (*handler)(struct regs *r));
+void register_isr(unsigned irq, void (*handler)(struct regs *r));
+static inline void register_irq(unsigned irq, void (*handler)(struct regs *r))
+{
+	register_isr(irq+32, handler);
+}
 
 void init_pit(void);
 void timer_phase(int hz);

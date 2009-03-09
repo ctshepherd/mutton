@@ -24,13 +24,13 @@ static const char *exceptions[] = {
 	"Machine Check"
 };
 
-static void *irq_routines[256] = {0};
+static void *isr_routines[256] = {0};
 
-void register_irq(unsigned irq, void (*handler)(struct regs *r))
+void register_isr(unsigned irq, void (*handler)(struct regs *r))
 {
-	if (irq_routines[irq])
+	if (isr_routines[irq])
 		printf("WARNING: re-assigning IRQ %d\n", irq);
-	irq_routines[irq] = handler;
+	isr_routines[irq] = handler;
 }
 
 static void irq_remap(void)
@@ -63,11 +63,11 @@ void isrs_install(void)
 	__asm__ __volatile__ ("sti");
 }
 
-static void exception_handler(struct regs *r)
+static void exception_msg(unsigned ex)
 {
 	puts("Fatal exception: ");
-	if (r->int_no < ARRAY_SIZE(exceptions))
-		puts(exceptions[r->int_no]);
+	if (ex < ARRAY_SIZE(exceptions))
+		puts(exceptions[ex]);
 	else
 		puts("Reserved Exception");
 	puts("\nPanicking: System Halted!\n");
@@ -76,16 +76,6 @@ static void exception_handler(struct regs *r)
 
 static void irq_handler(struct regs *r)
 {
-	void (*handler)(struct regs *r);
-
-	/* Find out if we have a custom handler to run for this IRQ, and then
-	 * run it. */
-	handler = irq_routines[r->int_no - 32];
-	if (handler)
-		handler(r);
-	else
-		printf("Unhandled IRQ %d\n", r->int_no - 32);
-
 	/* If the IDT entry that was invoked was greater than 40
 	 * (meaning IRQ8 - 15), then we need to send an EOI to the slave
 	 * controller. */
@@ -99,9 +89,17 @@ static void irq_handler(struct regs *r)
 
 void isr_handler(struct regs *r)
 {
-	if (r->int_no < 32)
-		/* This shouldn't return */
-		exception_handler(r);
-	else
+	void (*handler)(struct regs *r);
+	handler = isr_routines[r->int_no];
+	if (handler) {
+		handler(r);
+	} else {
+		if (r->int_no < 32)
+			/* This shouldn't return */
+			exception_msg(r->int_no);
+		else
+			printf("Unhandled IRQ %d\n", r->int_no-32);
+	}
+	if (r->int_no > 31)
 		irq_handler(r);
 }
