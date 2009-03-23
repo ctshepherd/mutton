@@ -25,7 +25,7 @@ enum format {
 static void parse_format(const char **_format, enum size *s, enum format *f,
 		unsigned *base)
 {
-	char *format = *_format;
+	const char *format = *_format;
 
 	switch (*format) {
 	case 'l':
