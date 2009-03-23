@@ -1,5 +1,4 @@
 boot: floppy
 floppya: 1_44="floppy.img", status=inserted
-#display_library: nogui
 keyboard_mapping: enabled=1, map=$BXSHARE/keymaps/x11-pc-uk.map
 magic_break: enabled=1
