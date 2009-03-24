@@ -12,6 +12,7 @@ struct regs {
 };
 
 void panic(const char *msg);
+#define assert(c)	(((c)) ? 0 : panic("Assertion " #c " failed"))
 
 void gdt_install(void);
 
