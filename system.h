@@ -31,3 +31,9 @@ void timer_phase(int hz);
 unsigned long gettimeofday(void);
 
 void init_kbd(void);
+
+extern unsigned end;
+#define kernel_end (&end)
+void *alloc_page(void);
+void free_page(unsigned long addr);
+void init_paging(void);

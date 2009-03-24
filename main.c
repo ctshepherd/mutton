@@ -19,7 +19,9 @@ static void init(void)
 	isrs_install();
 	puts(" done!\n");
 
-	puts("Initialising PIT...");
+	puts("Initialising paging...");
+	init_paging();
+	puts(" done!\nInitialising PIT...");
 	init_pit();
 	puts(" done!\nInitialising keyboard...");
 	init_kbd();
