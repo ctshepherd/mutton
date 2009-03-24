@@ -161,7 +161,7 @@ int _vprintf(const char *format, va_list ap, void (*output)(char c))
 			char *s = va_arg(ap, char *);
 			char *o = s;
 			while (*s)
-				output(*s);
+				output(*s++);
 			out += s - o;
 			continue;
 		}
