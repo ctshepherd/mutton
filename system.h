@@ -1,8 +1,5 @@
 #define ARRAY_SIZE(a) (sizeof(a)/sizeof(a[0]))
 
-#define __noreturn__		__attribute__((noreturn))
-#define __printf__(a, b)	__attribute__((format(printf, a, b)))
-
 struct regs {
 	/* pushed the segs last */
 	unsigned int gs, fs, es, ds;

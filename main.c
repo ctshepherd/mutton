@@ -3,7 +3,7 @@
 
 void panic(const char *msg)
 {
-	printf("PANIC! Reason: %s\n");
+	printf("PANIC! Reason: %s\n", msg);
 	while (1); /* Spin */
 }
 

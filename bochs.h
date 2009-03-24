@@ -1,9 +1,10 @@
 #ifndef _BOCHS_H
 #define _BOCHS_H
 
-#include "stdarg.h"
 #include "output.h"
 #include "port.h"
+#include "stdarg.h"
+#include "type.h"
 
 /* Outputs a character to the debug console */
 static inline void bochs_putch(char c)
@@ -24,7 +25,7 @@ static inline void bochs_break(void)
 	outportw(0x8A00, 0x8AE0);
 }
 
-static inline int bochs_printf(const char *format, ...)
+static inline int __printf__(1, 2) bochs_printf(const char *format, ...)
 {
 	va_list args;
 	int ret;
