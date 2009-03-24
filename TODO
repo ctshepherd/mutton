@@ -1,4 +1,5 @@
 1. Paging
+  - Relocate kernel?
   - Track owner - kernel/pid
   - Locks?
   - Use first fit - try to free later page tables
