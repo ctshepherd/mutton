@@ -95,9 +95,10 @@ void *alloc_page(void)
 	return (void *)(*(--stack));
 }
 
-void free_page(unsigned long addr)
+void free_page(void *addr)
 {
-	*stack++ = addr;
+	unsigned long a = (unsigned long)addr;
+	*stack++ = a;
 	alloced_pages--;
 	stack_depth++;
 }

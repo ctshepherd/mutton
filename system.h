@@ -36,5 +36,5 @@ void init_kbd(void);
 extern unsigned end;
 #define kernel_end (&end)
 void *alloc_page(void);
-void free_page(unsigned long addr);
+void free_page(void *addr);
 void init_paging(void);
