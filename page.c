@@ -99,7 +99,7 @@ void free_page(void *addr)
 {
 	unsigned long a = (unsigned long)addr;
 	*stack++ = a;
-	alloced_pages--;
+	assert(alloced_pages-- >= 0);
 	stack_depth++;
 }
 
