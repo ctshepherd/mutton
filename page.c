@@ -62,12 +62,13 @@ static void page_fault_handler(struct regs *r)
 	id = r->err_code & 0x10;
 
 	// Output an error message.
-	printf("Page fault! ( %s%s%s%s ) at %p\n",
+	printf("Page fault! ( %s%s%s%s ) at %p (EIP: %p)\n",
 		present ? "present " : "",
 		rw ? "read-only " : "",
 		us ? "user-mode" : "",
 		reserved ? "reserved " : "",
-		(void *)faulting_address);
+		(void *)faulting_address,
+		(void *)r->eip);
 	panic("Page fault");
 }
 
