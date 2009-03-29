@@ -7,6 +7,13 @@ void panic(const char *msg)
 	while (1); /* Spin */
 }
 
+void _assert(const char *statement, const char *func, unsigned line)
+{
+	printf("Assertion '%s' in function %s (line %u) failed\n",
+			statement, func, line);
+	panic("Assertion failed!\n");
+}
+
 /* Init function: load anything and everything needed. */
 static void init(void)
 {
