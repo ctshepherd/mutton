@@ -37,7 +37,7 @@ void scroll(void)
 		 * Finally, we set the chunk of memory that occupies the last
 		 * line of text to our 'blank' character
 		 */
-		memset(textmemptr + (25 - temp) * 80, blank, 80);
+		memsetw(textmemptr + (25 - temp) * 80, blank, 80);
 		csr_y = 25 - 1;
 	}
 }
