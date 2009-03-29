@@ -81,6 +81,19 @@ void *memcpy(void *dest, const void *src, size_t n)
 	return dest;
 }
 
+void *memmove(void *dest, const void *src, size_t n)
+{
+	if (dest > src) {
+		memcpy(dest, src, n);
+	} else {
+		char *_d = dest+(n-1);
+		const char *_s = src+(n-1);
+		while (n--)
+			*_d-- = *_s--;
+	}
+	return dest;
+}
+
 void *memset(void *d, int c, size_t n)
 {
 	char *_d = d;
