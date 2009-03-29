@@ -1,3 +1,4 @@
+#include "malloc.h"
 #include "screen.h"
 #include "system.h"
 
@@ -41,6 +42,7 @@ int main(void)
 	cls();
 	init();
 	puts("Hello world!\n");
+	test_malloc();
 	for (;;);
 	return 0;
 }
