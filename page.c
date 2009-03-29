@@ -100,7 +100,10 @@ void free_page(void *addr)
 {
 	unsigned long a = (unsigned long)addr;
 	*stack++ = a;
-	assert(alloced_pages-- >= 0);
+	/* Make sure we don't decrement alloced_pages when it's 0, which would
+	 * wrap around */
+	assert(alloced_pages);
+	alloced_pages--;
 	stack_depth++;
 }
 
