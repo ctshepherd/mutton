@@ -249,7 +249,7 @@ void *malloc(size_t n)
 		new_index = elem_num;
 		//printf("All elements smaller, appending new entry to the list in position %d\n", new_index);
 	} else {
-		memmove(&free_list[new_index+1], &free_list[new_index], i-new_index*sizeof(struct section_list));
+		memmove(&free_list[new_index+1], &free_list[new_index], (i-new_index)*sizeof(struct section_list));
 		//printf("Moving %p to %p (%u bytes), with %u in free_list now (new index is %d)\n",
 		//		&free_list[new_index+1],
 		//		&free_list[new_index],
