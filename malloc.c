@@ -14,6 +14,7 @@ struct header {
 };
 
 #define section_header(section)	((section)->size ^ (section)->chksum)
+#define realign(a)		((a & ~3) + 4)
 
 #define FREE_TYPE_HEADER	0xF2EE0000
 #define ALLOC_TYPE_HEADER	0xA11C0000
@@ -194,6 +195,7 @@ void *malloc(size_t n)
 	/* Can't handle requests bigger than a page */
 	if (n > 4096)
 		return NULL;
+	n = realign(n);
 	int i = get_area(n);
 	if (i < 0)
 		return NULL;
