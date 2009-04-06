@@ -181,6 +181,30 @@ static int get_area(unsigned n)
 	return elem_num-1;
 }
 
+void print_free_list(void)
+{
+	unsigned i;
+	printf("free_list[elem_num: %u] = {", elem_num);
+	for (i = 0; i < elem_num; i++)
+		printf("%p(%u), ", free_list[i].area, free_list[i].size);
+	puts("}\n");
+}
+
+void validate_free_list(void)
+{
+	struct section_list second_list[elem_num];
+	unsigned i;
+	for (i = 0; i < elem_num; i++) {
+		unsigned j;
+		second_list[i] = free_list[i];
+		for (j = 0; j < i; j++)
+			if (free_list[i].area == second_list[j].area || !free_list[i].area) {
+				print_free_list();
+				assert(0);
+			}
+	}
+}
+
 
 void *malloc(size_t n)
 {
@@ -194,6 +218,12 @@ void *malloc(size_t n)
 
 	/* Resize the section */
 	struct header *a = free_list[i].area, *b = end_section(a);
+	if (!valid_section(a)) {
+		print_section(a);
+		print_free_list();
+		assert(0);
+	}
+
 	int size = free_list[i].size;
 	int new_size = size - n - sizeof(struct header)*2;
 	if (new_size < MIN_SECTION_SIZE) {
@@ -251,10 +281,13 @@ void free(void *p)
 	/* Sanity checks */
 	if (!valid_section(a)) {
 		printf("WARNING: free was handed invalid section %p!!!\n", p);
+		print_section(a);
+		assert(0);
 		return;
 	}
 	if ((section_header(a) & TYPE_MASK) != ALLOC_TYPE_HEADER) {
 		printf("WARNING: free was handed already free section %p!!!\n", p);
+		assert(0);
 		return;
 	}
 
@@ -264,6 +297,7 @@ void free(void *p)
 		 * long term. */
 		printf("WARNING: free_list is full with %u elements: cannot add any more!!! Leaking section %p!!!\n",
 				elem_num, p);
+		assert(0);
 		return;
 	}
 
@@ -290,10 +324,12 @@ void *realloc(void *p, size_t n)
 	/* Sanity checks */
 	if (!valid_section(a)) {
 		printf("WARNING: realloc was handed invalid section %p!!!\n", p);
+		assert(0);
 		return NULL;
 	}
 	if ((section_header(a) & TYPE_MASK) != ALLOC_TYPE_HEADER) {
 		printf("WARNING: realloc was handed already free section %p!!!\n", p);
+		assert(0);
 		return NULL;
 	}
 
