@@ -261,8 +261,8 @@ void *malloc(size_t n)
 	int new_index = find_area(new_size);
 	/* | list | <new elem> | more of list | -> | old elem | */
 	if (new_index == -1) {
-		new_index = elem_num;
-		//printf("All elements smaller, appending new entry to the list in position %d\n", new_index);
+		new_index = elem_num-1;
+		memmove(&free_list[i], &free_list[i+1], (elem_num-1-i)*sizeof(struct section_list));
 	} else {
 		memmove(&free_list[new_index+1], &free_list[new_index],
 				(i-new_index)*sizeof(struct section_list));
