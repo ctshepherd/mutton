@@ -278,6 +278,9 @@ void free(void *p)
 {
 	struct header *a = (struct header *)p-1, *b;
 
+	if (!p)
+		return;
+
 	/* Sanity checks */
 	if (!valid_section(a)) {
 		printf("WARNING: free was handed invalid section %p!!!\n", p);
