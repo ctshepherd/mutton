@@ -307,6 +307,8 @@ void free(void *p)
 	int index = find_area(a->size);
 	/* Insert the entry in the free_list */
 	/* | list | <new elem> | more of list -> | */
+	if (index == -1)
+		index = elem_num;
 	memmove(&free_list[index+1], &free_list[index], (elem_num-index)*sizeof(struct section_list));
 	free_list[index].area = a;
 	free_list[index].size = a->size;
