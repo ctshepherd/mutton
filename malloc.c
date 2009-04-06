@@ -46,7 +46,6 @@ static unsigned valid_section(struct header *a)
 	struct header *b;
 	unsigned a_type, b_type;
 
-	bochs_break();
 	a_type = section_header(a) & TYPE_MASK;
 	if ((a_type != FREE_TYPE_HEADER && a_type != ALLOC_TYPE_HEADER) ||
 		(section_header(a) & POS_MASK) != START_POS_HEADER)
