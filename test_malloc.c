@@ -1,9 +1,9 @@
 #include "malloc.h"
 
 #define MAXP	400
-#define SUBP	20
+#define SUBP	10
 #define NPASS	25
-#define NLOOP	12
+#define NLOOP	1
 
 double metrics[NLOOP];
 
