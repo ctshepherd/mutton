@@ -267,7 +267,7 @@ void *malloc(size_t n)
 
 void free(void *p)
 {
-	struct header *a = p, *b;
+	struct header *a = (struct header *)p-1, *b;
 
 	/* Sanity checks */
 	if (!valid_section(a)) {
