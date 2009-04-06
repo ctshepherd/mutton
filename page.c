@@ -92,7 +92,8 @@ void *alloc_page(void)
 		alloced_pages++;
 		return _alloc_page();
 	}
-	assert(stack_depth--);
+	assert(stack_depth);
+	stack_depth--;
 	return (void *)(*(--stack));
 }
 
