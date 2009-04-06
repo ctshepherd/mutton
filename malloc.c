@@ -152,19 +152,14 @@ static int find_area(unsigned n)
 /* Get an appropriately sized area or create one */
 static int get_area(unsigned n)
 {
-	//printf("get_area called for size %u, ", n);
 	int i = find_area(n);
 
-	if (i >= 0) {
-		//printf("returning area %d\n", i);
+	if (i >= 0)
 		return i;
-	}
 
 	/* There's no available section in the free_list - create our own. */
 
-	//printf("no free area\n");
 	if (elem_num == MAX_FREE_ELEMS) {
-		//printf("Can't handle allocation: %u items in free_list\n", elem_num);
 		/*
 		 * If our free list is full, just fail the allocation - this
 		 * is really unlikely, unless we have a lot of fragmentation.
@@ -183,8 +178,6 @@ static int get_area(unsigned n)
 	b = end_section(a);
 	b->size = new->size;
 	b->chksum = new->size ^ (FREE_TYPE_HEADER | END_POS_HEADER);
-	printf("Put new item at %u in free_list (%p), with area %p (size %u %u %u)\n",
-			elem_num-1, new, new->area, new->size, a->size, b->size);
 	return elem_num-1;
 }
 
@@ -203,9 +196,6 @@ void *malloc(size_t n)
 	struct header *a = free_list[i].area, *b = end_section(a);
 	int size = free_list[i].size;
 	int new_size = size - n - sizeof(struct header)*2;
-	//printf("Got area %p (end section %p) of size %d (for allocation of size %d). "
-	//		"The new size is %u (struct header is %u bytes big).\n",
-	//		a, b, size, n, new_size, sizeof(struct header));
 	if (new_size < MIN_SECTION_SIZE) {
 		/* The area is either perfectly sized or (more likely) the
 		 * remainder is too small to be useful. Pop it off the list
@@ -213,10 +203,6 @@ void *malloc(size_t n)
 		/* | list | old elem | <- | rest of list | */
 		memmove(&free_list[i], &free_list[i+1], (elem_num-i)*sizeof(struct section_list));
 		elem_num--;
-		//printf("Moving %p to %p (%u bytes), with %u in free_list now\n",
-		//		&free_list[i], &free_list[i+1],
-		//		(elem_num-i)*sizeof(struct section_list),
-		//		elem_num);
 
 		/* Change the area headers to reflect its new allocated nature */
 		a->chksum = (ALLOC_TYPE_HEADER | START_POS_HEADER)^size;
@@ -239,8 +225,6 @@ void *malloc(size_t n)
 	new_a->chksum = (FREE_TYPE_HEADER | START_POS_HEADER)^new_size;
 	new_b->size = new_size;
 	new_b->chksum = (FREE_TYPE_HEADER |   END_POS_HEADER)^new_size;
-	//printf("Split area %p into two: starting at %p and %p (ends: %p and %p). They are size %u and %u\n",
-	//		a, a, new_a, b, new_b, size, new_size);
 
 	/* We find the index of the next free area bigger than new_size. This
 	 * needs to move down to the index of the old area */
@@ -250,12 +234,8 @@ void *malloc(size_t n)
 		new_index = elem_num;
 		//printf("All elements smaller, appending new entry to the list in position %d\n", new_index);
 	} else {
-		memmove(&free_list[new_index+1], &free_list[new_index], (i-new_index)*sizeof(struct section_list));
-		//printf("Moving %p to %p (%u bytes), with %u in free_list now (new index is %d)\n",
-		//		&free_list[new_index+1],
-		//		&free_list[new_index],
-		//		i-new_index*sizeof(struct section_list),
-		//		elem_num, new_index);
+		memmove(&free_list[new_index+1], &free_list[new_index],
+				(i-new_index)*sizeof(struct section_list));
 	}
 	free_list[new_index].area = new_a;
 	free_list[new_index].size = new_size;
