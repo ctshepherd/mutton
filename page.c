@@ -108,6 +108,11 @@ void free_page(void *addr)
 	stack_depth++;
 }
 
+unsigned pages_allocated(void)
+{
+	return alloced_pages;
+}
+
 
 void init_paging(void)
 {

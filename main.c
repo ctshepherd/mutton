@@ -39,10 +39,15 @@ static void init(void)
 
 int main(void)
 {
+	unsigned start, end;
 	cls();
 	init();
 	puts("Hello world!\n");
+	puts("Testing malloc...\n");
+	start = gettimeofday();
 	test_malloc();
+	end = gettimeofday();
+	printf("Malloc testing complete: %u seconds elapsed, %u pages used\n", end-start, pages_allocated());
 	for (;;);
 	return 0;
 }

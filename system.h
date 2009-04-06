@@ -38,4 +38,5 @@ extern unsigned end;
 #define kernel_end (&end)
 void *alloc_page(void);
 void free_page(void *addr);
+unsigned pages_allocated(void);
 void init_paging(void);
