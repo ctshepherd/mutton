@@ -11,24 +11,21 @@
   - Above needs a recursion tracker - make sure we don't overflow
     - Use a static var - this might need to become per-pid with threads
   - Doubly linked list of free/malloc'ed areas? is this really necessary?
-  - Header: size of area, type, checksum: 0xF2EE0F2EE0, 0xA110CA110C
-  - Shrink free area by malloc'ed area - if free area < sizeof header, just
-    merge it with malloc'ed area
   - Necessary: merge adjacent free areas - need this to reduce fragmentation
   - Optional: round up <256byte allocs to nearest power of 2 and use a bitmap
     to track allocs
 
-3. Task switches
+3. FAT
+  - Think about: file caches/memory pressure
 
-4. Scheduler
+4. Task switches
+
+5. Scheduler
   - Round robin design initially
 
-4 1/2. Atomic ops/Locks
+5 1/2. Atomic ops/Locks
   - Optional: record spinlock contention
   - Optional: name spinlocks
-
-5. FAT
-  - Think about: file caches/memory pressure
 
 6. Exceptions/asserts
   - Use ud2 instruction?
