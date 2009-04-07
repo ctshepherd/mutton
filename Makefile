@@ -4,7 +4,7 @@ else
 CFLAGS = -O2 -fomit-frame-pointer
 endif
 
-CFLAGS += -nostdinc -fno-builtin -Wall -W -Wextra -funsigned-char
+CFLAGS += -fno-builtin -Wall -W -Wextra -funsigned-char
 OBJECTS = main.o string.o screen.o gdt.o idt.o start.o helper.o isr.o isr_handlers.o output.o pit.o kbd.o page.o malloc.o test_malloc.o initrd.o vfs.o mboot.o
 
 all: kernel.bin
@@ -23,10 +23,14 @@ install:
 floppy.img:
 	./prep_image.sh
 
-disk: floppy.img kernel.bin
+initrd.img: mkinitrd
+	./mkinitrd *.c
+
+disk: floppy.img initrd.img kernel.bin
 	mkdir staging
 	sudo mount -o loop floppy.img staging
 	sudo cp kernel.bin staging/boot/grub/
+	sudo cp initrd.img staging/boot/grub/
 	sudo umount staging
 	rmdir staging
 
@@ -41,4 +45,4 @@ kernel.bin: link.ld $(OBJECTS)
 	ld -T link.ld -o kernel.bin $(OBJECTS)
 
 clean:
-	rm -f *.o kernel.bin
+	rm -f *.o kernel.bin initrd.img mkinitrd

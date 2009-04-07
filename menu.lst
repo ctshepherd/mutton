@@ -4,3 +4,4 @@ timeout 0
 title   Mutton
         root    (fd0)
         kernel  /boot/grub/kernel.bin
+        module  /boot/grub/initrd.img

@@ -1,6 +1,7 @@
 kernel.bin
-pad
 floppy.img
+initrd.img
 stage1
 stage2
 *.o
+mkinitrd
