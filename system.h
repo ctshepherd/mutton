@@ -11,6 +11,7 @@ struct regs {
 	unsigned int eip, cs, eflags, useresp, ss;
 };
 
+void stack_unwind(void);
 void panic(const char *msg);
 void _assert(const char *statement, const char *func, unsigned line);
 #define assert(c)	((c) ? 0 : _assert(#c, __func__, __LINE__))
