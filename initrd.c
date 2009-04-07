@@ -11,6 +11,9 @@
 
 #include "initrd.h"
 
+static const struct filesystem_ops initrd_fs_ops;
+static const struct filesystem initrd_fs;
+
 unsigned initrd_read(struct vfs_inode *f, unsigned offset, unsigned size, char *buf)
 {
 	struct initrd_superblock *sb = f->super->priv;
@@ -56,34 +59,12 @@ struct vfs_inode *initrd_finddir(struct vfs_inode *f, char *name)
 	return vfs_finddir(f, name);
 }
 
-static const struct filesystem_ops initrd_fs_ops = {
-	.read = initrd_read,
-	.write = NULL,
-	.open = initrd_open,
-	.close = initrd_close,
-//	.readdir = initrd_readdir,
-	.readdir = NULL,
-	.finddir = initrd_finddir,
-};
-
-static const struct filesystem initrd_fs = {
-	.name = "Initrd",
-	.ops = &initrd_fs_ops,
-	.initfs = init_initrd_fs,
-};
-
-unsigned init_initrd(void)
-{
-	return vfs_register_fs(&initrd_fs);
-}
-
 unsigned init_initrd_fs(struct superblock *s, char *disk, size_t length)
 {
 	struct initrd_superblock *sb;
 	struct vfs_dirent *d;
 	struct initrd_inode *i;
 	uint32_t version, checksum;
-	unsigned ret = 0;
 
 	s->fs = &initrd_fs;
 
@@ -134,4 +115,25 @@ unsigned init_initrd_fs(struct superblock *s, char *disk, size_t length)
 	memcpy(sb->contents, (char *)i, length);
 
 	return 0;
+}
+
+static const struct filesystem_ops initrd_fs_ops = {
+	.read = initrd_read,
+	.write = NULL,
+	.open = initrd_open,
+	.close = initrd_close,
+//	.readdir = initrd_readdir,
+	.readdir = NULL,
+	.finddir = initrd_finddir,
+};
+
+static const struct filesystem initrd_fs = {
+	.name = "Initrd",
+	.ops = &initrd_fs_ops,
+	.initfs = init_initrd_fs,
+};
+
+unsigned init_initrd(void)
+{
+	return vfs_register_fs(&initrd_fs);
 }

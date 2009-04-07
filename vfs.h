@@ -3,12 +3,16 @@
 
 #include "type.h"
 
-#define FS_FILE        0x01
-#define FS_DIRECTORY   0x02
-#define FS_CHARDEVICE  0x03
-#define FS_BLOCKDEVICE 0x04
-#define FS_PIPE        0x05
-#define FS_SYMLINK     0x06
+#define FS_FILE		0x01
+#define FS_DIRECTORY	0x02
+#define FS_CHARDEVICE	0x03
+#define FS_BLOCKDEVICE	0x04
+#define FS_PIPE		0x05
+#define FS_SYMLINK	0x06
+
+#define RDONLY		0x01
+#define WRONLY		0x02
+#define RDWRITE		0x03
 
 // One of these is returned by the readdir call, according to POSIX.
 struct vfs_dirent {
@@ -34,6 +38,7 @@ typedef struct vfs_inode *(*open_type_t)(struct superblock *s, uint32_t inode);
 typedef void (*close_type_t)(struct vfs_inode *f);
 typedef struct vfs_dirent *(*readdir_type_t)(struct vfs_inode *f, unsigned index);
 typedef struct vfs_inode *(*finddir_type_t)(struct vfs_inode *f, char *name);
+typedef unsigned (*initfs_type_t)(struct superblock *s, char *disk, size_t length);
 
 struct filesystem_ops {
 	read_type_t read;
@@ -47,6 +52,7 @@ struct filesystem_ops {
 struct filesystem {
 	const char *name;
 	const struct filesystem_ops *ops;
+	initfs_type_t initfs;
 };
 
 struct superblock {

@@ -1,5 +1,7 @@
+#include "malloc.h"
 #include "screen.h"
 #include "string.h"
+#include "system.h"
 #include "vfs.h"
 
 /* VFS stubs to keep basic parameter checking out of actual fs code */
@@ -33,7 +35,7 @@ struct vfs_inode *vfs_open_path(char *name, unsigned flags)
 	return NULL;
 }
 
-static vfs_inode *vfs_open_ino(struct superblock *s, unsigned inode, unsigned flags)
+struct vfs_inode *vfs_open_ino(struct superblock *s, unsigned inode, unsigned flags)
 {
 	struct vfs_inode *i;
 	open_type_t open;
@@ -50,7 +52,6 @@ static vfs_inode *vfs_open_ino(struct superblock *s, unsigned inode, unsigned fl
 
 	switch (flags) {
 	case RDWRITE:
-		flags = RDONLY | WRONLY;
 	case RDONLY:
 	case WRONLY:
 		if (i->flags & flags)
@@ -93,7 +94,7 @@ struct vfs_inode *vfs_finddir(struct vfs_inode *f, char *name)
 
 struct fs_list_entry {
 	struct fs_list_entry *next;
-	struct filesystem *fs;
+	const struct filesystem *fs;
 };
 
 static struct fs_list_entry *filesystems = NULL;
