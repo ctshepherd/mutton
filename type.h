@@ -4,8 +4,11 @@
 #define __noreturn__		__attribute__((noreturn))
 #define __printf__(a, b)	__attribute__((format(printf, a, b)))
 
+#undef NULL
 #define NULL			((void *) 0)
 
 typedef unsigned size_t;
+typedef unsigned uint32_t;
+typedef unsigned long uint64_t;
 
 #endif

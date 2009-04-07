@@ -5,7 +5,7 @@ CFLAGS = -O2 -fomit-frame-pointer
 endif
 
 CFLAGS += -nostdinc -fno-builtin -Wall -W -Wextra -funsigned-char
-OBJECTS = main.o string.o screen.o gdt.o idt.o start.o helper.o isr.o isr_handlers.o output.o pit.o kbd.o page.o malloc.o test_malloc.o
+OBJECTS = main.o string.o screen.o gdt.o idt.o start.o helper.o isr.o isr_handlers.o output.o pit.o kbd.o page.o malloc.o test_malloc.o initrd.o vfs.o
 
 all: kernel.bin
 
