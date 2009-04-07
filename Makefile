@@ -5,7 +5,7 @@ CFLAGS = -O2 -fomit-frame-pointer
 endif
 
 CFLAGS += -nostdinc -fno-builtin -Wall -W -Wextra -funsigned-char
-OBJECTS = main.o string.o screen.o gdt.o idt.o start.o helper.o isr.o isr_handlers.o output.o pit.o kbd.o page.o malloc.o test_malloc.o initrd.o vfs.o
+OBJECTS = main.o string.o screen.o gdt.o idt.o start.o helper.o isr.o isr_handlers.o output.o pit.o kbd.o page.o malloc.o test_malloc.o initrd.o vfs.o mboot.o
 
 all: kernel.bin
 
@@ -20,14 +20,15 @@ string.o: string.c string.h
 install:
 	sudo cp kernel.bin /boot/mutton.bin
 
-pad:
-	dd if=/dev/zero of=pad count=1 bs=750
+floppy.img:
+	./prep_image.sh
 
-floppy.img: stage1 stage2 pad kernel.bin
-	cat stage1 stage2 pad kernel.bin >floppy.img
-	python -c 'from math import ceil; print int(ceil(len(open("kernel.bin").read())/512))'
-
-disk: floppy.img
+disk: floppy.img kernel.bin
+	mkdir staging
+	sudo mount -o loop floppy.img staging
+	sudo cp kernel.bin staging/boot/grub/
+	sudo umount staging
+	rmdir staging
 
 start.o: start.asm
 	nasm -f elf -o start.o start.asm

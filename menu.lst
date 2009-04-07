@@ -1,0 +1,6 @@
+default 0
+timeout 0
+
+title   Mutton
+        root    (fd0)
+        kernel  /boot/grub/kernel.bin
