@@ -51,17 +51,22 @@ static void init(void)
 	puts("done!\n");
 }
 
-int main(void)
+static void time_malloc(void)
 {
 	unsigned start, end;
-	cls();
-	init();
-	puts("Hello world!\n");
 	puts("Testing malloc...\n");
 	start = gettimeofday();
 	test_malloc();
 	end = gettimeofday();
 	printf("Malloc testing complete: %u seconds elapsed, %u pages used\n", end-start, pages_allocated());
+}
+
+int main(void)
+{
+	cls();
+	init();
+	puts("Hello world!\n");
+	time_malloc();
 	for (;;);
 	return 0;
 }
