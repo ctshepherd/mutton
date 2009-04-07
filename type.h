@@ -7,8 +7,9 @@
 #undef NULL
 #define NULL			((void *) 0)
 
-typedef unsigned size_t;
-typedef unsigned uint32_t;
-typedef unsigned long uint64_t;
+typedef unsigned		size_t;
+typedef unsigned short		uint16_t;
+typedef unsigned int		uint32_t;
+typedef unsigned long long	uint64_t;
 
 #endif
