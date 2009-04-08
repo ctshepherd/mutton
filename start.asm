@@ -25,6 +25,8 @@ SECTION .data
 
 stublet:
     extern main
+    push ebx
+    push eax
     call main
     jmp $
 

@@ -1,4 +1,5 @@
 #include "malloc.h"
+#include "mboot.h"
 #include "screen.h"
 #include "system.h"
 
@@ -60,12 +61,19 @@ static void time_malloc(void)
 	printf("Malloc testing complete: %u seconds elapsed, %u pages used\n", end-start, pages_allocated());
 }
 
-int main(void)
+int main(unsigned magic, struct mboot_info *m)
 {
 	cls();
+	if (magic == 0x2BADB002)
+		load_mboot(m);
+	else
+		puts("Not loaded by a multiboot bootloader");
 	init();
+
 	puts("Hello world!\n");
-	time_malloc();
+
+	print_mboot();
+
 	for (;;);
 	return 0;
 }
