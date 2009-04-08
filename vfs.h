@@ -29,13 +29,14 @@ struct vfs_inode {
 	uint32_t flags;       // Includes the node type. See #defines above.
 	uint32_t ino;   // This is device-specific - provides a way for a filesystem to identify files.
 	uint32_t length;      // Size of the file, in bytes.
+	unsigned refcount;
 	struct superblock *super;
 };
 
 typedef unsigned (*read_type_t)(struct vfs_inode *f, unsigned offset, unsigned size, char *buf);
 typedef unsigned (*write_type_t)(struct vfs_inode *f, unsigned offset, unsigned size, char *buf);
 typedef struct vfs_inode *(*open_type_t)(struct superblock *s, uint32_t inode);
-typedef void (*close_type_t)(struct vfs_inode *f);
+typedef void (*delinode_type_t)(struct vfs_inode *f);
 typedef struct vfs_dirent *(*readdir_type_t)(struct vfs_inode *f, unsigned index);
 typedef struct vfs_inode *(*finddir_type_t)(struct vfs_inode *f, char *name);
 typedef unsigned (*initfs_type_t)(struct superblock *s, char *disk, size_t length);
@@ -44,7 +45,7 @@ struct filesystem_ops {
 	read_type_t read;
 	write_type_t write;
 	open_type_t open;
-	close_type_t close;
+	delinode_type_t delinode;
 	readdir_type_t readdir;
 	finddir_type_t finddir;
 };
@@ -71,6 +72,7 @@ struct vfs_dirent *vfs_readdir(struct vfs_inode *node, unsigned index);
 struct vfs_inode *vfs_finddir(struct vfs_inode *node, char *name);
 
 unsigned vfs_register_fs(const struct filesystem *fs);
+unsigned vfs_init_inode(struct vfs_inode *f);
 
 struct vfs_inode *vfs_finddir_wrapper(struct vfs_inode *f, char *name);
 

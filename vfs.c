@@ -11,6 +11,12 @@
 	if (f)					\
 		op = GET_FS_OP(f, op);		\
 
+unsigned vfs_init_inode(struct vfs_inode *f)
+{
+	memset(f, 0, sizeof(struct vfs_inode));
+	return 0;
+}
+
 unsigned vfs_read(struct vfs_inode *f, unsigned offset, size_t size, char *buffer)
 {
 	VFS_STUB(read);
@@ -54,23 +60,29 @@ struct vfs_inode *vfs_open_ino(struct superblock *s, unsigned inode, unsigned fl
 	case RDWRITE:
 	case RDONLY:
 	case WRONLY:
-		if (i->flags & flags)
-			return i;
-		else
+		if (!(i->flags & flags))
 			return ERROR_PTR;
 	default:
 		assert(0);
 		return ERROR_PTR;
 	}
+
+	i->refcount++;
+	return i;
 }
 
 
 void vfs_close(struct vfs_inode *f)
 {
-	VFS_STUB(close);
-	if (!close)
+	if (!f)
 		return;
-	close(f);
+	assert(f->refcount);
+	f->refcount--;
+	if (!f->refcount) {
+		VFS_STUB(delinode);
+		if (delinode)
+			delinode(f);
+	}
 }
 
 struct vfs_dirent *vfs_readdir(struct vfs_inode *f, unsigned index)

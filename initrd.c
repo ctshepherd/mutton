@@ -42,11 +42,6 @@ struct vfs_inode *initrd_open(struct superblock *s, uint32_t inode)
 	return vi;
 }
 
-void initrd_close(struct vfs_inode *f)
-{
-	return;
-}
-
 #if 0
 struct vfs_dirent *readdir(struct vfs_inode *f, unsigned index)
 {
@@ -121,7 +116,7 @@ static const struct filesystem_ops initrd_fs_ops = {
 	.read = initrd_read,
 	.write = NULL,
 	.open = initrd_open,
-	.close = initrd_close,
+	.delinode = NULL,
 //	.readdir = initrd_readdir,
 	.readdir = NULL,
 	.finddir = initrd_finddir,
