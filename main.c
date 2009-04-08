@@ -1,4 +1,3 @@
-#include "bochs.h"
 #include "malloc.h"
 #include "screen.h"
 #include "system.h"
