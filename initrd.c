@@ -15,7 +15,7 @@
 static const struct filesystem_ops initrd_fs_ops;
 static const struct filesystem initrd_fs;
 
-unsigned initrd_read(struct vfs_inode *f, unsigned offset, unsigned size, char *buf)
+static unsigned initrd_read(struct vfs_inode *f, unsigned offset, unsigned size, char *buf)
 {
 	struct initrd_superblock *sb = f->super->priv;
 	struct initrd_inode *i = &sb->inode_list[f->ino];
@@ -23,7 +23,7 @@ unsigned initrd_read(struct vfs_inode *f, unsigned offset, unsigned size, char *
 	return size;
 }
 
-struct vfs_inode *initrd_open(struct superblock *s, uint32_t inode)
+static struct vfs_inode *initrd_open(struct superblock *s, uint32_t inode)
 {
 	struct vfs_inode *vi = malloc(sizeof(struct vfs_inode));
 	struct initrd_superblock *sb = s->priv;
@@ -50,12 +50,12 @@ struct vfs_dirent *readdir(struct vfs_inode *f, unsigned index)
 }
 #endif
 
-struct vfs_inode *initrd_finddir(struct vfs_inode *f, char *name)
+static struct vfs_inode *initrd_finddir(struct vfs_inode *f, char *name)
 {
 	return vfs_finddir(f, name);
 }
 
-unsigned init_initrd_fs(struct superblock *s, char *disk, size_t length)
+static unsigned init_initrd_fs(struct superblock *s, char *disk, size_t length)
 {
 	struct initrd_superblock *sb;
 	struct vfs_dirent *d;
