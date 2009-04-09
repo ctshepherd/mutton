@@ -19,3 +19,5 @@ struct initrd_superblock {
 	struct initrd_inode *inode_list;
 	char *contents;
 };
+
+unsigned init_initrd(void);

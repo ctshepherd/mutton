@@ -1,3 +1,4 @@
+#include "initrd.h"
 #include "malloc.h"
 #include "mboot.h"
 #include "screen.h"
@@ -47,8 +48,11 @@ static void init(void)
 	init_pit();
 	puts(" done!\nInitialising keyboard...");
 	init_kbd();
+	puts(" done!\n");
 
-	puts("done!\n");
+	puts("Initialising initrd fs...");
+	init_initrd();
+	puts(" done!\n");
 }
 
 static void time_malloc(void)
