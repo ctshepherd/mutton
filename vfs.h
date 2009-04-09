@@ -66,7 +66,8 @@ struct superblock {
 
 unsigned vfs_read(struct vfs_inode *node, unsigned offset, size_t size, char *buffer);
 unsigned vfs_write(struct vfs_inode *node, unsigned offset, size_t size, char *buffer);
-struct vfs_inode *vfs_open(char *name, unsigned flags);
+struct vfs_inode *vfs_open_path(char *name, unsigned flags);
+struct vfs_inode *vfs_open_ino(struct superblock *s, unsigned inode, unsigned flags);
 void vfs_close(struct vfs_inode *node);
 struct vfs_dirent *vfs_readdir(struct vfs_inode *node, unsigned index);
 struct vfs_inode *vfs_finddir(struct vfs_inode *node, char *name);
