@@ -126,6 +126,33 @@ unsigned vfs_register_fs(const struct filesystem *fs)
 	return 0;
 }
 
+struct superblock *mount_fs(char *name, char *disk, size_t length)
+{
+	struct superblock *s;
+	struct fs_list_entry *e = filesystems;
+
+	while (e) {
+		if (!strcmp(e->fs->name, name))
+			goto out;
+	}
+	printf("VFS could not load filesystem %s: not found\n", name);
+	return NULL;
+
+out:
+	s = malloc(sizeof(struct superblock));
+	if (!s)
+		return NULL;
+	memset(s, 0, sizeof(struct superblock));
+	s->fs = e->fs;
+
+	unsigned ret;
+	if ((ret = e->fs->initfs(s, disk, length))) {
+		free(s);
+		printf("VFS could not load filesystem %s: got ret %u from initfs\n", name, ret);
+		return NULL;
+	}
+	return s;
+}
 
 
 /*

@@ -74,6 +74,7 @@ struct vfs_inode *vfs_finddir(struct vfs_inode *node, char *name);
 
 unsigned vfs_register_fs(const struct filesystem *fs);
 unsigned vfs_init_inode(struct vfs_inode *f);
+struct superblock *mount_fs(char *name, char *disk, size_t length);
 
 struct vfs_inode *vfs_finddir_wrapper(struct vfs_inode *f, char *name);
 
