@@ -62,6 +62,7 @@ struct vfs_inode *vfs_open_ino(struct superblock *s, unsigned inode, unsigned fl
 	case WRONLY:
 		if (!(i->flags & flags))
 			return ERROR_PTR;
+		break;
 	default:
 		assert(0);
 		return ERROR_PTR;
