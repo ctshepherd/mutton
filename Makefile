@@ -1,7 +1,7 @@
 ifdef DEBUG
 CFLAGS = -O0 -ggdb3
 else
-CFLAGS = -O2 -fomit-frame-pointer
+CFLAGS = -O2
 endif
 
 CFLAGS += -fno-builtin -Wall -W -Wextra -funsigned-char
