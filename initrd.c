@@ -125,7 +125,7 @@ static const struct filesystem_ops initrd_fs_ops = {
 };
 
 static const struct filesystem initrd_fs = {
-	.name = "Initrd",
+	.name = "initrd",
 	.ops = &initrd_fs_ops,
 	.initfs = init_initrd_fs,
 };
