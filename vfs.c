@@ -24,6 +24,8 @@ unsigned vfs_read(struct vfs_inode *f, unsigned offset, size_t size, char *buffe
 		return 0;
 	if (offset+size > f->length)
 		size = f->length - offset;
+	if (!size)
+		return 0;
 	return read(f, offset, size, buffer);
 }
 
