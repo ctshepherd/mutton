@@ -194,3 +194,13 @@ struct vfs_inode *vfs_finddir_wrapper(struct vfs_inode *f, char *name)
 	}
 	return NULL;
 }
+
+unsigned vfs_filldir(const char *name, uint32_t ino, struct vfs_dirent *d)
+{
+	if (strlen(name) > 128)
+		return 1;
+	strncpy(d->name, name, 127);
+	d->name[127] = '\0';
+	d->ino = ino;
+	return 0;
+}

@@ -77,5 +77,6 @@ unsigned vfs_init_inode(struct vfs_inode *f);
 struct superblock *mount_fs(char *name, char *disk, size_t length);
 
 struct vfs_inode *vfs_finddir_wrapper(struct vfs_inode *f, char *name);
+unsigned vfs_filldir(const char *name, uint32_t ino, struct vfs_dirent *d);
 
 #endif
