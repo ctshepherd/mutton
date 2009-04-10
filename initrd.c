@@ -1,7 +1,10 @@
 /*
  * Initrd format:
- *  - Inode table
- *  - Inodes
+ *  - uint32: version
+ *  - uint32: checksum (xors with version to give initrd magic num)
+ *  - Array of vfs_dirent's, terminated by NULL entry
+ *  - Array of initrd_inode's, terminated by NULL entry
+ *  - Raw data, sorted by inode
  */
 
 #include "vfs.h"
