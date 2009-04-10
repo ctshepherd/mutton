@@ -31,6 +31,8 @@ static unsigned initrd_open(struct superblock *s, uint32_t inode, struct vfs_ino
 	struct initrd_superblock *sb = s->priv;
 	struct initrd_inode *di;
 
+	if (inode > sb->inode_num)
+		return 1;
 	di = &sb->inode_list[inode];
 	f->mask = di->mask;
 	f->mask = di->mask;
@@ -107,6 +109,7 @@ static unsigned init_initrd_fs(struct superblock *s, char *disk, size_t length)
 		}
 		length -= sizeof(struct initrd_inode);
 	} while (i->flags && i++);
+	sb->inode_num = i-sb->inode_list-1;
 
 	sb->contents = (char *)i;
 	s->fs = &initrd_fs;

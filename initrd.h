@@ -17,6 +17,7 @@ struct initrd_superblock {
 	struct superblock s;
 	struct vfs_dirent *file_list;
 	struct initrd_inode *inode_list;
+	unsigned inode_num;
 	char *contents;
 };
 
