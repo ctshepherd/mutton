@@ -27,7 +27,7 @@ struct pte {
 };
 
 #define get_frame_addr(a)	(((unsigned long)(a))>>12)
-#define page_align(a)		(((unsigned long)(a) & 0xFFFFF000) + 0x1000)
+#define page_align(a)		ALIGN(a, 0x1000)
 
 /* Levels */
 #define SUPERVISOR	0

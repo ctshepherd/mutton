@@ -42,6 +42,8 @@ void free_page(void *addr);
 unsigned pages_allocated(void);
 void init_paging(void);
 
+#define ALIGN(a, n)		((typeof(a))((unsigned long)a & ~((n)-1)) + (n))
+
 #define offsetof(type, member)		__builtin_offsetof(type, member)
 #define container_of(ptr, type, member) ({				\
 		const typeof(((type *)0)->member) *__mptr = (ptr);	\
