@@ -45,6 +45,7 @@ struct vfs_inode *vfs_open_path(char *name, unsigned flags)
 
 struct vfs_inode *vfs_open_ino(struct superblock *s, unsigned inode, unsigned flags)
 {
+	unsigned ret;
 	struct vfs_inode *i;
 	open_type_t open;
 
@@ -54,24 +55,30 @@ struct vfs_inode *vfs_open_ino(struct superblock *s, unsigned inode, unsigned fl
 	if (!open)
 		return ERROR_PTR;
 
-	i = open(s, inode);
+	i = malloc(sizeof(struct vfs_inode));
 	if (!i)
 		return ERROR_PTR;
+	ret = open(s, inode, i);
+	if (ret)
+		goto err;
 
 	switch (flags) {
 	case RDWRITE:
 	case RDONLY:
 	case WRONLY:
 		if (!(i->flags & flags))
-			return ERROR_PTR;
+			goto err;
 		break;
 	default:
 		assert(0);
-		return ERROR_PTR;
+		goto err;
 	}
 
 	i->refcount++;
 	return i;
+err:
+	free(i);
+	return ERROR_PTR;
 }
 
 
@@ -90,10 +97,22 @@ void vfs_close(struct vfs_inode *f)
 
 struct vfs_dirent *vfs_readdir(struct vfs_inode *f, unsigned index)
 {
+	unsigned ret;
+	struct vfs_dirent *d;
 	VFS_STUB(readdir);
 	if (!readdir)
 		return ERROR_PTR;
-	return readdir(f, index);
+	if (!(f->flags & FS_DIRECTORY))
+		return ERROR_PTR;
+	d = malloc(sizeof(struct vfs_dirent));
+	if (!d)
+		return ERROR_PTR;
+	ret = readdir(f, index, d);
+	if (ret) {
+		free(d);
+		return ERROR_PTR;
+	}
+	return d;
 }
 
 struct vfs_inode *vfs_finddir(struct vfs_inode *f, char *name)
@@ -163,19 +182,15 @@ out:
 struct vfs_inode *vfs_finddir_wrapper(struct vfs_inode *f, char *name)
 {
 	unsigned index;
-	open_type_t open = GET_FS_OP(f, open);
-	readdir_type_t readdir = GET_FS_OP(f, readdir);
-	if (!open || !readdir)
-		return ERROR_PTR;
 	if (!(f->flags & FS_DIRECTORY))
 		return ERROR_PTR;
 
 	for (index = 0; ; index++) {
-		struct vfs_dirent *d = readdir(f, index);
+		struct vfs_dirent *d = vfs_readdir(f, index);
 		if (!d)
 			break;
 		if (!strcmp(d->name, name))
-			return open(f->super, d->ino);
+			return vfs_open_ino(f->super, d->ino, RDONLY);
 	}
 	return NULL;
 }

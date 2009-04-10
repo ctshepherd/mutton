@@ -26,24 +26,22 @@ static unsigned initrd_read(struct vfs_inode *f, unsigned offset, unsigned size,
 	return size;
 }
 
-static struct vfs_inode *initrd_open(struct superblock *s, uint32_t inode)
+static unsigned initrd_open(struct superblock *s, uint32_t inode, struct vfs_inode *f)
 {
-	struct vfs_inode *vi = malloc(sizeof(struct vfs_inode));
 	struct initrd_superblock *sb = s->priv;
-	struct initrd_inode *di = &sb->inode_list[inode];
+	struct initrd_inode *di;
 
-	if (!vi)
-		return NULL;
-	vi->mask = di->mask;
-	vi->mask = di->mask;
-	vi->uid = di->uid;
-	vi->gid = di->gid;
-	vi->flags = RDONLY;
-	vi->ino = di->ino;
-	vi->length = di->length;
-	vi->super = s;
+	di = &sb->inode_list[inode];
+	f->mask = di->mask;
+	f->mask = di->mask;
+	f->uid = di->uid;
+	f->gid = di->gid;
+	f->flags = RDONLY;
+	f->ino = di->ino;
+	f->length = di->length;
+	f->super = s;
 
-	return vi;
+	return 0;
 }
 
 #if 0
