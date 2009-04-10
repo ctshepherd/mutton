@@ -3,12 +3,12 @@
 
 #include "type.h"
 
-#define FS_FILE		0x01
-#define FS_DIRECTORY	0x02
-#define FS_CHARDEVICE	0x03
-#define FS_BLOCKDEVICE	0x04
-#define FS_PIPE		0x05
-#define FS_SYMLINK	0x06
+#define FS_FILE		0x010
+#define FS_DIRECTORY	0x020
+#define FS_CHARDEVICE	0x040
+#define FS_BLOCKDEVICE	0x080
+#define FS_PIPE		0x100
+#define FS_SYMLINK	0x200
 
 #define RDONLY		0x01
 #define WRONLY		0x02
