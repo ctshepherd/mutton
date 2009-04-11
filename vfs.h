@@ -3,12 +3,31 @@
 
 #include "type.h"
 
-#define FS_FILE		0x010
-#define FS_DIRECTORY	0x020
-#define FS_CHARDEVICE	0x040
-#define FS_BLOCKDEVICE	0x080
-#define FS_PIPE		0x100
-#define FS_SYMLINK	0x200
+#ifndef _SYS_STAT_H
+#define S_IFMT		0170000		/* bit mask for the file type bit fields */
+#define S_IFSOCK	0140000		/* socket */
+#define S_IFLNK		0120000		/* symbolic link */
+#define S_IFREG		0100000		/* regular file */
+#define S_IFBLK		0060000		/* block device */
+#define S_IFDIR		0040000		/* directory */
+#define S_IFCHR		0020000		/* character device */
+#define S_IFIFO		0010000		/* FIFO */
+#define S_ISUID		0004000		/* set UID bit */
+#define S_ISGID		0002000		/* set-group-ID bit (see below) */
+#define S_ISVTX		0001000		/* sticky bit (see below) */
+#define S_IRWXU		00700		/* mask for file owner permissions */
+#define S_IRUSR		00400		/* owner has read permission */
+#define S_IWUSR		00200		/* owner has write permission */
+#define S_IXUSR		00100		/* owner has execute permission */
+#define S_IRWXG		00070		/* mask for group permissions */
+#define S_IRGRP		00040		/* group has read permission */
+#define S_IWGRP		00020		/* group has write permission */
+#define S_IXGRP		00010		/* group has execute permission */
+#define S_IRWXO		00007		/* mask for permissions for others (not in group) */
+#define S_IROTH		00004		/* others have read permission */
+#define S_IWOTH		00002		/* others have write permission */
+#define S_IXOTH		00001		/* others have execute permission */
+#endif
 
 #define RDONLY		0x01
 #define WRONLY		0x02
@@ -23,11 +42,10 @@ struct vfs_dirent {
 struct filesystem;
 
 struct vfs_inode {
-	uint32_t mask;        // The permissions mask.
+	uint32_t mask;        // The permissions mask (includes file type)
 	uint32_t uid;         // The owning user.
 	uint32_t gid;         // The owning group.
-	uint32_t flags;       // Includes the node type. See #defines above.
-	uint32_t ino;   // This is device-specific - provides a way for a filesystem to identify files.
+	uint32_t ino;         // This is device-specific - provides a way for a filesystem to identify files.
 	uint32_t length;      // Size of the file, in bytes.
 	unsigned refcount;
 	struct superblock *super;

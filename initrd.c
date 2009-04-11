@@ -35,10 +35,8 @@ static unsigned initrd_open(struct superblock *s, uint32_t inode, struct vfs_ino
 		return 1;
 	di = &sb->inode_list[inode];
 	f->mask = di->mask;
-	f->mask = di->mask;
 	f->uid = di->uid;
 	f->gid = di->gid;
-	f->flags = RDONLY;
 	f->ino = di->ino;
 	f->length = di->length;
 	f->super = s;

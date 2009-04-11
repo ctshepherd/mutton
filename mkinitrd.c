@@ -42,10 +42,9 @@ int main(int argc, char **argv)
 			perror(argv[i]);
 			return -1;
 		}
-		inode.mask = buf.st_mode;
+		inode.mask = buf.st_mode & ~(S_IWOTH|S_IWGRP|S_IWUSR); /* Unset writable permissions */
 		inode.uid = buf.st_uid;
 		inode.gid = buf.st_gid;
-		inode.flags = FS_FILE;
 		inode.ino = i-1;
 		inode.length = buf.st_size;
 		inode.offset = offset;

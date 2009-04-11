@@ -62,17 +62,24 @@ struct vfs_inode *vfs_open_ino(struct superblock *s, unsigned inode, unsigned fl
 	if (ret)
 		goto err;
 
+	/* Assume caller is owner for the moment */
 	switch (flags) {
 	case RDWRITE:
+		flags = S_IRUSR|S_IWUSR;
+		break;
 	case RDONLY:
+		flags = S_IWUSR;
+		break;
 	case WRONLY:
-		if (!(i->flags & flags))
-			goto err;
+		flags = S_IRUSR;
 		break;
 	default:
 		assert(0);
 		goto err;
 	}
+
+	if (!(i->flags & flags))
+		goto err;
 
 	i->refcount++;
 	return i;
@@ -102,7 +109,7 @@ struct vfs_dirent *vfs_readdir(struct vfs_inode *f, unsigned index)
 	VFS_STUB(readdir);
 	if (!readdir)
 		return ERROR_PTR;
-	if (!(f->flags & FS_DIRECTORY))
+	if (!(f->flags & S_IFDIR))
 		return ERROR_PTR;
 	d = malloc(sizeof(struct vfs_dirent));
 	if (!d)
@@ -182,7 +189,7 @@ out:
 struct vfs_inode *vfs_finddir_wrapper(struct vfs_inode *f, char *name)
 {
 	unsigned index;
-	if (!(f->flags & FS_DIRECTORY))
+	if (!(f->flags & S_IFDIR))
 		return ERROR_PTR;
 
 	for (index = 0; ; index++) {
