@@ -20,19 +20,22 @@ string.o: string.c string.h
 install:
 	sudo cp kernel.bin /boot/mutton.bin
 
-floppy.img:
+base_floppy.img: menu.lst prep_image.sh
 	./prep_image.sh
 
 initrd.img: mkinitrd
 	./mkinitrd *.c
 
-disk: floppy.img initrd.img kernel.bin
+floppy.img: base_floppy.img initrd.img kernel.bin
+	cp base_floppy.img floppy.img
 	mkdir staging
 	sudo mount -o loop floppy.img staging
 	sudo cp kernel.bin staging/boot/grub/
 	sudo cp initrd.img staging/boot/grub/
 	sudo umount staging
 	rmdir staging
+
+disk: floppy.img
 
 start.o: start.asm
 	nasm -f elf -o start.o start.asm

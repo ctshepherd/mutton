@@ -1,4 +1,5 @@
 kernel.bin
+base_floppy.img
 floppy.img
 initrd.img
 stage1
