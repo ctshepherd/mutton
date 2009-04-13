@@ -104,7 +104,7 @@ void vfs_close(struct vfs_inode *f)
 
 struct vfs_dirent *vfs_readdir(struct vfs_inode *f, unsigned index)
 {
-	unsigned ret;
+	int ret;
 	struct vfs_dirent *d;
 	VFS_STUB(readdir);
 	if (!readdir)
@@ -115,11 +115,13 @@ struct vfs_dirent *vfs_readdir(struct vfs_inode *f, unsigned index)
 	if (!d)
 		return ERROR_PTR;
 	ret = readdir(f, index, d);
-	if (ret) {
-		free(d);
+	if (!ret)
+		return d;
+	free(d);
+	if (ret == -1)
+		return NULL;
+	else
 		return ERROR_PTR;
-	}
-	return d;
 }
 
 struct vfs_inode *vfs_finddir(struct vfs_inode *f, char *name)

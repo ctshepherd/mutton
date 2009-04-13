@@ -55,7 +55,7 @@ typedef unsigned (*read_type_t)(struct vfs_inode *f, unsigned offset, unsigned s
 typedef unsigned (*write_type_t)(struct vfs_inode *f, unsigned offset, unsigned size, char *buf);
 typedef unsigned (*open_type_t)(struct superblock *s, uint32_t inode, struct vfs_inode *f);
 typedef void (*delinode_type_t)(struct vfs_inode *f);
-typedef unsigned (*readdir_type_t)(struct vfs_inode *f, unsigned index, struct vfs_dirent *d);
+typedef int (*readdir_type_t)(struct vfs_inode *f, unsigned index, struct vfs_dirent *d);
 typedef struct vfs_inode *(*finddir_type_t)(struct vfs_inode *f, char *name);
 typedef unsigned (*initfs_type_t)(struct superblock *s, char *disk, size_t length);
 
