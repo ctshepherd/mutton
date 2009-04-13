@@ -78,7 +78,7 @@ struct vfs_inode *vfs_open_ino(struct superblock *s, unsigned inode, unsigned fl
 		goto err;
 	}
 
-	if (!(i->flags & flags))
+	if (!(i->mask & flags))
 		goto err;
 
 	i->refcount++;
@@ -109,7 +109,7 @@ struct vfs_dirent *vfs_readdir(struct vfs_inode *f, unsigned index)
 	VFS_STUB(readdir);
 	if (!readdir)
 		return ERROR_PTR;
-	if (!(f->flags & S_IFDIR))
+	if (!(f->mask & S_IFDIR))
 		return ERROR_PTR;
 	d = malloc(sizeof(struct vfs_dirent));
 	if (!d)
@@ -189,7 +189,7 @@ out:
 struct vfs_inode *vfs_finddir_wrapper(struct vfs_inode *f, char *name)
 {
 	unsigned index;
-	if (!(f->flags & S_IFDIR))
+	if (!(f->mask & S_IFDIR))
 		return ERROR_PTR;
 
 	for (index = 0; ; index++) {
