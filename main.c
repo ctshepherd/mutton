@@ -3,6 +3,7 @@
 #include "mboot.h"
 #include "screen.h"
 #include "system.h"
+#include "vfs.h"
 
 void panic(const char *msg)
 {
@@ -75,8 +76,27 @@ int main(unsigned magic, struct mboot_info *m)
 	init();
 
 	puts("Hello world!\n");
+	assert(m->mods_count > 0);
+	uint32_t initrd_location = *((uint32_t*)m->mods_addr);
+	uint32_t initrd_end = *(uint32_t*)(m->mods_addr+4);
+	unsigned i = 0;
+	struct vfs_dirent *node = NULL;
+	struct superblock *s = mount_fs("initrd", (char *)initrd_location, initrd_end-initrd_location);
+	while ((node = vfs_readdir(s->root, i++)) != NULL) {
+		puts("Found file \"");
+		puts(node->name);
+		struct vfs_inode *fsnode = vfs_finddir(s->root, node->name);
 
-	print_mboot();
+		if (fsnode == ERROR_PTR) {
+			printf("got error, skipping...\n");
+			continue;
+		}
+		if (fsnode->mask & S_IFDIR)
+			puts("\" (directory)\n");
+		else
+			puts("\" (regular flag)\n");
+	}
+	puts("end\n");
 
 	for (;;);
 	return 0;

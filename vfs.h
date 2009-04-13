@@ -76,6 +76,7 @@ struct filesystem {
 
 struct superblock {
 	const struct filesystem *fs;
+	struct vfs_inode *root;
 	void *priv;
 };
 
