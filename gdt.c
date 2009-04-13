@@ -1,6 +1,5 @@
 #include "system.h"
 
-/* Defines a GDT entry. Prevent compiler "optimization" by packing. */
 struct gdt_entry {
 	unsigned short limit_low;
 	unsigned short base_low;
@@ -10,20 +9,14 @@ struct gdt_entry {
 	unsigned char base_high;
 } __attribute__((packed));
 
-/* Special pointer which includes the limit: The max bytes taken up by the
- * GDT, minus 1. */
 struct gdt_ptr {
 	unsigned short limit;
 	unsigned int base;
 } __attribute__((packed));
 
-/* Our GDT, with 3 entries, and finally our special GDT pointer */
 static struct gdt_entry gdt[3];
-struct gdt_ptr gp;
+static struct gdt_ptr gp;
 
-void gdt_flush(void);
-
-#if 0
 static void gdt_flush(void)
 {
 	asm("lgdt %0\n\t"
@@ -33,11 +26,11 @@ static void gdt_flush(void)
 		"movw %%ax,%%fs\n\t"
 		"movw %%ax,%%gs\n\t"
 		"movw %%ax,%%ss\n\t"
-		"jmp flush2, 0x08\n\t" /* 0x08 is the offset to our code segment: Far jump! */
+		"ljmp $0x8, $flush2\n\t" /* 0x08 is the offset to our code segment: Far jump! */
 		"flush2:\n\t"
 		: :"m"(gp));
 }
-#endif
+
 
 /* Setup a descriptor in the Global Descriptor Table */
 static void gdt_set_gate(int num, unsigned long base, unsigned long limit, unsigned char access, unsigned char gran)
@@ -64,19 +57,9 @@ void gdt_install(void)
 
 	/* Our NULL descriptor */
 	gdt_set_gate(0, 0, 0, 0, 0);
-
-	/*
-	 * The second entry is our Code Segment. The base address is 0, the
-	 * limit is 4GBytes, it uses 4KByte granularity, uses 32-bit opcodes,
-	 * and is a Code Segment descriptor.
-	 */
+	/* Code Segment */
 	gdt_set_gate(1, 0, 0xFFFFFFFF, 0x9A, 0xCF);
-
-	/*
-	 * The third entry is our Data Segment. It's exactly the same as the
-	 * code segment, but the descriptor type in this entry's access byte
-	 * says it's a Data Segment.
-	 */
+	/* Data Segment */
 	gdt_set_gate(2, 0, 0xFFFFFFFF, 0x92, 0xCF);
 
 	/* Flush out the old GDT and install the new one */

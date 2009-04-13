@@ -5,7 +5,7 @@ CFLAGS = -O2
 endif
 
 CFLAGS += -fno-builtin -Wall -W -Wextra -funsigned-char
-OBJECTS = main.o string.o screen.o gdt.o idt.o start.o helper.o isr.o isr_handlers.o output.o pit.o kbd.o page.o malloc.o test_malloc.o initrd.o vfs.o mboot.o
+OBJECTS = main.o string.o screen.o gdt.o idt.o start.o isr.o isr_handlers.o output.o pit.o kbd.o page.o malloc.o test_malloc.o initrd.o vfs.o mboot.o
 
 all: kernel.bin
 
@@ -39,8 +39,6 @@ disk: floppy.img
 
 start.o: start.asm
 	nasm -f elf -o start.o start.asm
-helper.o: helper.asm
-	nasm -f elf -o helper.o helper.asm
 isr_handlers.o: isr_handlers.asm
 	nasm -f elf -o isr_handlers.o isr_handlers.asm
 
