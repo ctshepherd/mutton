@@ -2,6 +2,7 @@
 #include "malloc.h"
 #include "mboot.h"
 #include "screen.h"
+#include "string.h"
 #include "system.h"
 #include "vfs.h"
 
@@ -66,6 +67,31 @@ static void time_malloc(void)
 	printf("Malloc testing complete: %u seconds elapsed, %u pages used\n", end-start, pages_allocated());
 }
 
+static void print_directory(struct vfs_inode *f, unsigned indent)
+{
+	unsigned i = 0;
+	struct vfs_dirent *node;
+	while ((node = vfs_readdir(f, i++)) != NULL) {
+		puts("\nFound file \"");
+		puts(node->name);
+		struct vfs_inode *fsnode = vfs_finddir(f, node->name);
+
+		if (fsnode == ERROR_PTR) {
+			puts("got error, skipping...\n");
+			continue;
+		}
+		if (fsnode->mask & S_IFDIR) {
+			puts("\" (directory):");
+			if (strcmp(node->name, "."))
+				print_directory(fsnode, indent+1);
+			else
+				puts(" (same file)");
+		} else {
+			puts("\" (regular file)");
+		}
+	}
+}
+
 int main(unsigned magic, struct mboot_info *m)
 {
 	cls();
@@ -79,24 +105,8 @@ int main(unsigned magic, struct mboot_info *m)
 	assert(m->mods_count > 0);
 	uint32_t initrd_location = *((uint32_t*)m->mods_addr);
 	uint32_t initrd_end = *(uint32_t*)(m->mods_addr+4);
-	unsigned i = 0;
-	struct vfs_dirent *node = NULL;
 	struct superblock *s = mount_fs("initrd", (char *)initrd_location, initrd_end-initrd_location);
-	while ((node = vfs_readdir(s->root, i++)) != NULL) {
-		puts("Found file \"");
-		puts(node->name);
-		struct vfs_inode *fsnode = vfs_finddir(s->root, node->name);
-
-		if (fsnode == ERROR_PTR) {
-			printf("got error, skipping...\n");
-			continue;
-		}
-		if (fsnode->mask & S_IFDIR)
-			puts("\" (directory)\n");
-		else
-			puts("\" (regular flag)\n");
-	}
-	puts("end\n");
+	print_directory(s->root, 0);
 
 	for (;;);
 	return 0;
