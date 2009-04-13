@@ -53,7 +53,7 @@ struct vfs_dirent *readdir(struct vfs_inode *f, unsigned index)
 
 static struct vfs_inode *initrd_finddir(struct vfs_inode *f, char *name)
 {
-	return vfs_finddir(f, name);
+	return vfs_finddir_wrapper(f, name);
 }
 
 static unsigned init_initrd_fs(struct superblock *s, char *disk, size_t length)
