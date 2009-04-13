@@ -68,10 +68,10 @@ struct vfs_inode *vfs_open_ino(struct superblock *s, unsigned inode, unsigned fl
 		flags = S_IRUSR|S_IWUSR;
 		break;
 	case RDONLY:
-		flags = S_IWUSR;
+		flags = S_IRUSR;
 		break;
 	case WRONLY:
-		flags = S_IRUSR;
+		flags = S_IWUSR;
 		break;
 	default:
 		assert(0);
