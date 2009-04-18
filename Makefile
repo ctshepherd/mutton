@@ -19,6 +19,7 @@ string.o: string.c string.h
 
 install:
 	sudo cp kernel.bin /boot/mutton.bin
+	sudo cp initrd.img /boot/mutton_initrd.img
 
 base_floppy.img: menu.lst prep_image.sh
 	./prep_image.sh
