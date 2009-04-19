@@ -5,7 +5,25 @@ CFLAGS = -O2
 endif
 
 CFLAGS += -fno-builtin -Wall -W -Wextra -funsigned-char
-OBJECTS = main.o string.o screen.o gdt.o idt.o start.o isr.o isr_handlers.o output.o pit.o kbd.o page.o malloc.o test_malloc.o initrd.o vfs.o mboot.o
+OBJECTS =			\
+	gdt.o			\
+	idt.o			\
+	initrd.o		\
+	isr_handlers.o		\
+	isr.o			\
+	kbd.o			\
+	main.o			\
+	malloc.o		\
+	mboot.o			\
+	output.o		\
+	page.o			\
+	pit.o			\
+	screen.o		\
+	start.o			\
+	string.o		\
+	test_malloc.o		\
+	vfs.o			\
+
 
 all: kernel.bin
 
