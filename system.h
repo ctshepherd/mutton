@@ -25,9 +25,10 @@ void idt_install(void);
 void idt_set_gate(unsigned char num, unsigned long base, unsigned short sel,
 		unsigned char flags);
 
+typedef void (*irq_handler_t)(struct regs *r);
 void isrs_install(void);
-void register_isr(unsigned irq, void (*handler)(struct regs *r));
-static inline void register_irq(unsigned irq, void (*handler)(struct regs *r))
+void register_isr(unsigned irq, irq_handler_t handler);
+static inline void register_irq(unsigned irq, irq_handler_t handler)
 {
 	register_isr(irq+32, handler);
 }

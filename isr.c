@@ -24,9 +24,9 @@ static const char *exceptions[] = {
 	"Machine Check"
 };
 
-static void *isr_routines[256] = {0};
+static irq_handler_t isr_routines[256] = {NULL};
 
-void register_isr(unsigned irq, void (*handler)(struct regs *r))
+void register_isr(unsigned irq, irq_handler_t handler)
 {
 	if (isr_routines[irq])
 		printf("WARNING: re-assigning IRQ %d\n", irq);
@@ -87,10 +87,9 @@ static void irq_handler(struct regs *r)
 	outportb(0x20, 0x20);
 }
 
-void isr_handler(struct regs *r)
+static void isr_handler(struct regs *r)
 {
-	void (*handler)(struct regs *r);
-	handler = isr_routines[r->int_no];
+	irq_handler_t handler = isr_routines[r->int_no];
 	if (handler) {
 		handler(r);
 	} else {
