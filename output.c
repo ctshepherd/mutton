@@ -1,4 +1,6 @@
+#include "output.h"
 #include "stdarg.h"
+#include "system.h"
 
 static const char hex[] = "0123456789ABCDEF";
 
@@ -78,8 +80,8 @@ static void parse_format(const char **_format, enum size *s, enum format *f,
 		*base = 16;
 		break;
 	default:
-		;
-		/* XXX: Assert: we should never get here */
+		/* We should never get here */
+		assert(0);
 	}
 
 	*_format = ++format;
@@ -188,9 +190,8 @@ int _vprintf(const char *format, va_list ap, void (*output)(char c))
 			continue;
 			}
 		case LONGLONG: {
-			/* XXX: This will cause an exception */
-			char *s = 0x0;
-			output(*s);
+			/* Unsupported atm */
+			assert(0);
 			}
 		}
 	}
