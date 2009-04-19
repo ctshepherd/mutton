@@ -72,9 +72,10 @@ static void print_directory(struct vfs_inode *f, unsigned indent)
 	unsigned i = 0;
 	struct vfs_dirent *node;
 	while ((node = vfs_readdir(f, i++)) != NULL) {
+		struct vfs_inode *fsnode;
 		puts("\nFound file \"");
 		puts(node->name);
-		struct vfs_inode *fsnode = vfs_finddir(f, node->name);
+		fsnode = vfs_finddir(f, node->name);
 
 		if (fsnode == ERROR_PTR) {
 			puts("got error, skipping...\n");

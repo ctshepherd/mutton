@@ -122,9 +122,11 @@ static struct vfs_inode *initrd_finddir(struct vfs_inode *f, char *name)
 static unsigned init_initrd_fs(struct superblock *s, char *disk, size_t length)
 {
 	struct initrd_superblock *sb;
+	struct initrd_disk_dir *d;
 	struct initrd_inode *i;
 	uint32_t *header;
 	uint32_t version, checksum;
+	char *contents = NULL;
 
 	sb = malloc(sizeof(struct initrd_superblock));
 	if (!sb)
@@ -164,8 +166,7 @@ static unsigned init_initrd_fs(struct superblock *s, char *disk, size_t length)
 	header = (uint32_t *)++i;
 	sb->dir_num = *header++;
 	assert(sb->dir_num);
-	struct initrd_disk_dir *d = (struct initrd_disk_dir *)header;
-	char *contents = NULL;
+	d = (struct initrd_disk_dir *)header;
 	sb->dir_list = process_disk_dirs(d, sb->dir_num, &contents);
 
 	if (!sb->dir_list) {
