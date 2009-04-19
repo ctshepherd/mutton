@@ -39,13 +39,6 @@ unsigned long gettimeofday(void);
 
 void init_kbd(void);
 
-extern unsigned end;
-#define kernel_end (&end)
-void *alloc_page(void);
-void free_page(void *addr);
-unsigned pages_allocated(void);
-void init_paging(void);
-
 #define ALIGN(a, n)		((typeof(a))((unsigned long)a & ~((n)-1)) + (n))
 
 #define offsetof(type, member)		__builtin_offsetof(type, member)
