@@ -14,7 +14,10 @@ struct regs {
 void stack_unwind(void);
 void panic(const char *msg);
 void _assert(const char *statement, const char *func, unsigned line);
-#define assert(c)	((c) ? 0 : _assert(#c, __func__, __LINE__))
+#define assert(c) do {					\
+	if (!(c))					\
+		_assert(#c, __func__, __LINE__);	\
+} while (0)
 
 void gdt_install(void);
 
