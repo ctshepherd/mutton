@@ -87,7 +87,7 @@ static void irq_handler(struct regs *r)
 	outportb(0x20, 0x20);
 }
 
-static void isr_handler(struct regs *r)
+void isr_handler(struct regs *r)
 {
 	irq_handler_t handler = isr_routines[r->int_no];
 	if (handler) {
