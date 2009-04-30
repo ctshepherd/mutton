@@ -5,17 +5,6 @@
 static struct pte *page_directory;
 static struct pte *page_table;
 
-static void load_page_bits(void)
-{
-	unsigned dummy;
-	asm volatile("mov %0, %%cr3": : "r"(page_directory));
-	/* Set the paging bit in CR0 */
-	asm volatile("movl %%cr0, %0\n\t"
-			"orl $0x80000000, %0\n\t"
-			"movl %0, %%cr0\n"
-			: "=&r"(dummy): );
-}
-
 static void page_fault_handler(struct regs *r)
 {
 	unsigned faulting_address, present, rw, us, reserved, id;
@@ -114,5 +103,6 @@ void init_paging(void)
 		page_directory[i].present = 0;
 	}
 	register_isr(14, page_fault_handler);
-	load_page_bits();
+	load_page_dir(page_directory);
+	enable_paging();
 }

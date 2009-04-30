@@ -38,6 +38,37 @@ struct pte {
 
 extern unsigned end;
 #define kernel_end (&end)
+
+static inline void enable_paging(void)
+{
+	unsigned dummy;
+	asm volatile("movl %%cr0, %0\n\t"
+			"orl $0x80000000, %0\n\t"
+			"movl %0, %%cr0\n"
+			: "=&r"(dummy): );
+}
+
+static inline void disable_paging(void)
+{
+	unsigned dummy;
+	asm volatile("movl %%cr0, %0\n\t"
+			"andl $0x7FFFFFFF, %0\n\t"
+			"movl %0, %%cr0\n"
+			: "=&r"(dummy): );
+}
+
+static inline void load_page_dir(struct pte *page_directory)
+{
+	asm volatile("mov %0, %%cr3": : "r"(page_directory));
+}
+
+static inline struct pte *get_cur_page_dir(void)
+{
+	struct pte *page_dir;
+	asm volatile("mov %%cr3, %0": "=r"(page_dir));
+	return page_dir;
+}
+
 void *alloc_page(void);
 void free_page(void *addr);
 unsigned pages_allocated(void);
