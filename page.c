@@ -78,7 +78,7 @@ void init_paging(void)
 	 * Set up the start of the base page allocator.
 	 * Note: it will not work before init_paging is called!
 	 */
-	alloc_page_cur_addr = frame_addr(page_align(kernel_end));
+	alloc_page_cur_addr = frame_addr(page_align(&kernel_end));
 
 	page_directory = _alloc_page();
 	page_table = _alloc_page();

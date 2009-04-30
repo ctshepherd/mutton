@@ -36,9 +36,6 @@ struct pte {
 #define PAGE_RONLY		0
 #define PAGE_RW			1
 
-extern unsigned end;
-#define kernel_end (&end)
-
 static inline void enable_paging(void)
 {
 	unsigned dummy;
@@ -68,6 +65,8 @@ static inline struct pte *get_cur_page_dir(void)
 	asm volatile("mov %%cr3, %0": "=r"(page_dir));
 	return page_dir;
 }
+
+extern unsigned kernel_end;
 
 void *alloc_page(void);
 void free_page(void *addr);
