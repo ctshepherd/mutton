@@ -6,6 +6,7 @@ endif
 
 CFLAGS += -fno-builtin -Wall -W -Wextra -funsigned-char
 OBJECTS =			\
+	start.o			\
 	gdt.o			\
 	idt.o			\
 	initrd.o		\
@@ -19,7 +20,6 @@ OBJECTS =			\
 	page.o			\
 	pit.o			\
 	screen.o		\
-	start.o			\
 	string.o		\
 	test_malloc.o		\
 	vfs.o			\
