@@ -80,8 +80,8 @@ void init_paging(void)
 	 */
 	alloc_page_cur_addr = frame_addr(page_align(&kernel_end));
 
-	page_directory = _alloc_page();
-	page_table = _alloc_page();
+	page_directory = alloc_page();
+	ident_page_table = alloc_page();
 
 	/* Map the first 4MB of memory */
 	for (address = 0, i = 0; i < 1024; i++, address += 4096) {
