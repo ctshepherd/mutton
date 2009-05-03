@@ -1,9 +1,9 @@
 #include "page.h"
 #include "screen.h"
+#include "string.h"
 #include "system.h"
 
-static struct pte *page_directory;
-static struct pte *page_table;
+static struct pte *ident_page_table;
 
 static void page_fault_handler(struct regs *r)
 {
@@ -71,37 +71,45 @@ unsigned pages_allocated(void)
 
 void init_paging(void)
 {
+	struct pte *page_directory, *stack_page_table;
 	unsigned long address;
 	unsigned i;
 
 	/*
 	 * Set up the start of the base page allocator.
+	 * We start allocating pages from the page that begins at the end of
+	 * the kernel.
 	 * Note: it will not work before init_paging is called!
 	 */
 	alloc_page_cur_addr = frame_addr(page_align(&kernel_end));
 
 	page_directory = alloc_page();
 	ident_page_table = alloc_page();
+	stack_page_table = alloc_page();
 
 	/* Map the first 4MB of memory */
 	for (address = 0, i = 0; i < 1024; i++, address += 4096) {
-		page_table[i].frame_addr = frame_addr(address);
-		page_table[i].level = PAGE_SUPERVISOR;
-		page_table[i].rw = PAGE_RW;
-		page_table[i].present = 1;
+		set_page_attr(ident_page_table[i], address, PAGE_SUPERVISOR,
+				PAGE_RW, 1);
 	}
 
-	/* Fill the first entry of the page directory */
-	page_directory[0].frame_addr = frame_addr(page_table);
-	page_directory[0].level = PAGE_SUPERVISOR;
-	page_directory[0].rw = PAGE_RW;
-	page_directory[0].present = 1;
+	memset(stack_page_table, 0, 4096);
+	/* Map the two pages, starting at sys_stack_end */
+	/* We make sure sys_stack_end is page aligned in start.asm */
+	set_page_attr(stack_page_table[0], &sys_stack_end, PAGE_SUPERVISOR,
+			PAGE_RW, 1);
+	set_page_attr(stack_page_table[1], &sys_stack_end+0x1000, PAGE_SUPERVISOR,
+			PAGE_RW, 1);
 
-	for (i = 1; i < 1024; i++) {
-		page_directory[i].level = PAGE_SUPERVISOR;
-		page_directory[i].rw = PAGE_RW;
-		page_directory[i].present = 0;
-	}
+	memset(page_directory, 0, 4096);
+	/* Identity map the first 4MB */
+	set_page_attr(page_directory[0], ident_page_table, PAGE_SUPERVISOR,
+			PAGE_RW, 1);
+
+	/* Map the processes stack at 0x80000 */
+	set_page_attr(page_directory[2], stack_page_table, PAGE_SUPERVISOR,
+			PAGE_RW, 1);
+
 	register_isr(14, page_fault_handler);
 	load_page_dir(page_directory);
 	enable_paging();

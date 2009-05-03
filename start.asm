@@ -3,7 +3,7 @@
 SECTION .text
 global start
 start:
-    mov esp, _sys_stack     ; This points the stack to our new stack area
+    mov esp, sys_stack     ; This points the stack to our new stack area
     jmp stublet
 
 ; This part MUST be 4byte aligned
@@ -32,6 +32,9 @@ stublet:
 
 
 ; Reserve 8Kb of stack space
+ALIGN 4096
 SECTION .bss
+global sys_stack_end
+sys_stack_end:
     resb 8192
-_sys_stack:
+sys_stack:

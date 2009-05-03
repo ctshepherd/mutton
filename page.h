@@ -26,8 +26,16 @@ struct pte {
 	unsigned frame_addr:20;
 } __attribute__((packed));
 
-#define frame_addr(a)		(((unsigned long)(a))>>12)
+#define frame_addr(a)		(((unsigned long)(a)) >> 12)
+#define phys_addr(a)		((void *)((a) << 12))
 #define page_align(a)		ALIGN(a, 0x1000)
+
+#define set_page_attr(pg, a, l, r, p) do {			\
+	pg.frame_addr = frame_addr(a);				\
+	pg.level = l;						\
+	pg.rw = r;						\
+	pg.present = p;						\
+} while (0)
 
 /* Levels */
 #define PAGE_SUPERVISOR		0
@@ -67,6 +75,7 @@ static inline struct pte *get_cur_page_dir(void)
 }
 
 extern unsigned kernel_end;
+extern unsigned sys_stack_end;
 
 void *alloc_page(void);
 void free_page(void *addr);
